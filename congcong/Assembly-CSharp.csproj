@@ -45,11 +45,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Source\BufferManager\DrawNode.cs" />
      <Compile Include="Assets\Source\BufferManager\GraphicNode.cs" />
      <Compile Include="Assets\Source\DefineManager\Defined.cs" />
      <Compile Include="Assets\Source\IoManager\FileManager.cs" />
      <Compile Include="Assets\Source\IoManager\ResourceManager.cs" />
      <Compile Include="Assets\Source\MainManager.cs" />
+     <Compile Include="Assets\Source\ViewManager\DrawManager.cs" />
      <Compile Include="Assets\Source\ViewManager\ViewManager.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

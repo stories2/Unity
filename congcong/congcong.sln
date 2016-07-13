@@ -1,7 +1,7 @@
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2008
-
-Project("{FFE0170D-BD16-1802-C1A0-F89E54BF1739}") = "congcong", "Assembly-CSharp.csproj", "{6872CB93-C650-0850-E806-662A094C0A4A}"
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "congcong.CSharp", "congcong.CSharp.csproj", "{B84765DF-0EE5-34BC-E43A-D00C7AA561E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,15 +9,12 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6872CB93-C650-0850-E806-662A094C0A4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6872CB93-C650-0850-E806-662A094C0A4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6872CB93-C650-0850-E806-662A094C0A4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6872CB93-C650-0850-E806-662A094C0A4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B84765DF-0EE5-34BC-E43A-D00C7AA561E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B84765DF-0EE5-34BC-E43A-D00C7AA561E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B84765DF-0EE5-34BC-E43A-D00C7AA561E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B84765DF-0EE5-34BC-E43A-D00C7AA561E6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Assembly-CSharp.csproj
 	EndGlobalSection
 EndGlobal

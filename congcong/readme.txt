@@ -1,3 +1,9 @@
+20160713 - 1
+DrawNode 에는 화면에 그려질 데이터가 저장된 노드이다
+DrawManager 에는 DrawNode 를 관리하는 루트 클레스이다, 새치기 큐가 구현되어 있다
+ViewManager 에는 DrawManager를 연동하여 DrawNode에 저장된 데이터를 실행하여 화면에 뿌려주는 역활을 한다
+MainManager 에는 ViewManager에 그릴 데이터 2개를 임의로 저장하여 우선순위 드로잉과 노멀 드로잉을 테스트한다
+
 20160713
 congcong이라는 android 게임을 개발
 Resources 폴더에는 101.png 부터 236.png 까지 그래픽 자료가 들어가 있다
