@@ -1,3 +1,12 @@
+20160714
+ItemNode에는 int 형 데이터가 담겨 그래픽 프로세싱 번호를 저장한다
+Defined 에 draw jump max 변수는 2차함수를 이용한 frame per speed 의 최대값을 지정한다
+GameMenu 에는 실질적인 게임이 진행된다
+StartMenu 에는 처음 초기화면에 대한 처리를 담당한다
+ConvertManager에는 캐릭터의 frame per speed 를 구하는 2차함수 가 정의되었으며, 그래픽 파일의 중심을 찾아주고
+해상도에 따른 늘려주는 크기를 계산한다
+MainManager 에는 메뉴 전환에 도움을 주는 함수가 정의되어있다
+
 20160713 - 1
 DrawNode 에는 화면에 그려질 데이터가 저장된 노드이다
 DrawManager 에는 DrawNode 를 관리하는 루트 클레스이다, 새치기 큐가 구현되어 있다

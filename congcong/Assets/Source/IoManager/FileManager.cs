@@ -13,6 +13,7 @@ public class FileManager : MonoBehaviour {
     public void init()
     {
         resource_manager = gameObject.AddComponent<ResourceManager>();
+        resource_manager.init();
     }
 
     public bool load_resource()
@@ -23,12 +24,17 @@ public class FileManager : MonoBehaviour {
         Texture2D data;
         int i;
 
-        for (i = Defined.character_name_start_point; i < Defined.character_name_end_point; i += 1)
+        for (i = Defined.character_name_start_point; i <= Defined.character_name_end_point; i += 1)
         {
             data = (Texture2D)Resources.Load("" + i) as Texture2D;
             resource_manager.add(data);
         }
         return true;
+    }
+
+    public Texture2D get_resource(int id)
+    {
+        return resource_manager.get_resource(id);
     }
 
     public void release_resource()

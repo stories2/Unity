@@ -6,7 +6,7 @@ public class DrawNode : MonoBehaviour {
     public delegate void DrawFunc_label(Rect pos, string str);
     public delegate bool DrawFunc_box(Rect pos, string str);
     public delegate bool DrawFunc_toggle(Rect pos, bool toggle, string str);
-    public delegate void DrawFunc_texture(Rect pos, Texture2D texture, Rect add_on_pos, float top_left, float top_right, float bot_left, float bot_right);
+    public delegate void DrawFunc_texture(Rect pos, Texture2D texture, Rect add_on_pos, int top_left, int top_right, int bot_left, int bot_right);
 
     DrawNode next_link;
     float return_val, min, max;

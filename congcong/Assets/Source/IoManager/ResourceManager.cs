@@ -8,13 +8,28 @@ public class ResourceManager : MonoBehaviour {
 	void Start () {
 
         Debug.Log("ResourceManager Start");
-        init();
+        //init();
 	}
 
     public void init()
     {
         rear = null;
         front = null;
+    }
+
+    public Texture2D get_resource(int id)
+    {
+        int i;
+        GraphicNode node = front;
+        for(i = 1; i <= id && node != null; i += 1)
+        {
+            if(id == i)
+            {
+                return node.get_texture();
+            }
+            node = node.get_link();
+        }
+        return null;
     }
 
     public Texture2D del()

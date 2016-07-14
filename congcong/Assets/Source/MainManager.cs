@@ -5,6 +5,11 @@ public class MainManager : MonoBehaviour {
 
     FileManager file_manager;
     ViewManager view_manager;
+    TouchManager touch_manager;
+    ConvertManager convert_manager;
+    StartMenu start_menu;
+    GameMenu game_menu;
+
     bool r_flag;
 	// Use this for initialization
 	void Start () {
@@ -16,6 +21,9 @@ public class MainManager : MonoBehaviour {
     {
         this.file_manager = gameObject.AddComponent<FileManager>();
         this.view_manager = gameObject.AddComponent<ViewManager>();
+        this.touch_manager = gameObject.AddComponent<TouchManager>();
+        this.convert_manager = gameObject.AddComponent<ConvertManager>();
+        //this.start_menu = gameObject.AddComponent<StartMenu>();
 
         //view_manager.get_draw_manager().add()
         r_flag = true;
@@ -29,24 +37,65 @@ public class MainManager : MonoBehaviour {
             r_flag = false;
 
             file_manager.init();
-            /*if(file_manager.load_resource())
+            if(file_manager.load_resource())
             {
                 Debug.Log("Load Ok");
             }
             else
             {
                 Debug.Log("Load Error");
-            }*/
+            }
 
+            touch_manager.init(touch_event_manager);
+            convert_manager.init();
+
+            create_menu(2);
+            /*Texture2D test = file_manager.get_resource(2);
 
             view_manager.get_draw_manager().add(0.0F, 0.0F, 0.0F, new Rect(100, 0, 100, 50), new Rect(0, 0, 0, 0), false, null, 2, 0, "hello world",
                 null, null, null, GUI.Toggle);
             view_manager.get_draw_manager().add(0.0F, 0.0F, 0.0F, new Rect(0, 0, 100, 50), new Rect(0, 0, 0, 0), false, null, 1, 0, "hello world",
                 null, GUI.Button, null, null);
-        }
 
-
+            view_manager.get_draw_manager().add(0.0F, 0.0F, 0.0F, new Rect(200, 0, 32, 32), new Rect(1 / test.width, 1 / test.height, 1, 1), false, test, 3, 0, "", null,
+                null, Graphics.DrawTexture, null);*/
+        }        
 	}
+
+    public void create_menu(int menu_id)
+    {
+        if(menu_id == 1)
+        {
+            if(start_menu)
+            {
+                Destroy(start_menu);
+            }
+            start_menu = gameObject.AddComponent<StartMenu>();
+            start_menu.set_change_menu(create_menu);
+            start_menu.set_draw_manager(view_manager.get_draw_manager());
+            start_menu.set_convert_manager(convert_manager);
+            start_menu.set_show(true);
+        }
+        if(menu_id == 2)
+        {
+            if(game_menu)
+            {
+                Destroy(game_menu);
+            }
+            game_menu = gameObject.AddComponent<GameMenu>();
+            game_menu.set_change_menu(create_menu);
+            game_menu.set_draw_manager(view_manager.get_draw_manager());
+            game_menu.set_convert_manager(convert_manager);
+            game_menu.set_file_manager(file_manager);
+            game_menu.set_show(true);
+        }
+    }
+
+    public void touch_event_manager(Vector2 pos, int finger_id, TouchPhase action)
+    {
+        pos = convert_manager.reversal_small_y(convert_manager.convert_to_smaller_position(pos));
+        Debug.Log("pos : " + pos.x + " , " + pos.y + " : " + finger_id + " action " + action);
+    }
 
     void OnDestroy()
     {

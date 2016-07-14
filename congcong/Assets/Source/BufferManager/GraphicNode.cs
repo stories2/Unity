@@ -3,13 +3,11 @@ using System.Collections;
 
 public class GraphicNode : MonoBehaviour {
 
-    Texture2D data;
-    GraphicNode next_link;
+    Texture2D data = null;
+    GraphicNode next_link = null;
 	// Use this for initialization
 	void Start () {
 
-        data = null;
-        next_link = null;
 	}
 
     public void set_link(GraphicNode next_link)

@@ -4,6 +4,7 @@ using System.Collections;
 public class DrawManager : MonoBehaviour {
 
     DrawNode rear = null, front = null;
+    int primary_id = 0;
 	// Use this for initialization
 	void Start () {
 
@@ -41,13 +42,27 @@ public class DrawManager : MonoBehaviour {
         return front == null;
     }
 
-    public void add(float return_val, float min, float max, Rect pos, Rect add_on_pos, bool return_event, Texture2D texture,
+    public DrawNode get_draw_node(int id)
+    {
+        DrawNode node = front;
+        while(node)
+        {
+            if (node.get_node_id() == id)
+                return node;
+            node = node.get_link();
+        }
+
+        return null;
+    }
+
+    public int add(float return_val, float min, float max, Rect pos, Rect add_on_pos, bool return_event, Texture2D texture,
         int deep, int id, string banner, DrawNode.DrawFunc_label func_label, DrawNode.DrawFunc_box func_box, DrawNode.DrawFunc_texture func_texture,
         DrawNode.DrawFunc_toggle func_toggle)
     {
         DrawNode node = gameObject.AddComponent<DrawNode>();
         if(node)
         {
+            primary_id += 1;
             //Debug.Log("new node");
             node.init();
             node.set_return_val(return_val);
@@ -58,7 +73,7 @@ public class DrawManager : MonoBehaviour {
             node.set_return_event(return_event);
             node.set_texture(texture);
             node.set_deep(deep);
-            node.set_node_id(id);
+            node.set_node_id(primary_id);
             node.set_banner(banner);
             node.set_func(func_label);
             node.set_func(func_box);
@@ -76,6 +91,32 @@ public class DrawManager : MonoBehaviour {
                 //Debug.Log("search");
                 search(node);
             }
+
+            return primary_id;
+        }
+        return 0;
+    }
+
+    public void search_del(int id)
+    {
+        DrawNode node = front,save_node = null;
+        while(node)
+        {
+            if(node.get_node_id() == id)
+            {
+                if(save_node)
+                {
+                    save_node.set_link(node.get_link());
+                }
+                else
+                {
+                    front = node.get_link();
+                }
+                Destroy(node);
+                return;
+            }
+            save_node = node;
+            node = node.get_link();
         }
     }
 
