@@ -28,11 +28,20 @@ public class ConvertManager : MonoBehaviour {
         return position;
     }
 
+    public Vector2 get_wind(float wind_degree)
+    {
+        float degree = wind_degree, seta;
+        seta = ((float)Mathf.PI / 180) * degree;
+        return new Vector2(Mathf.Cos(seta) * Defined.over_speed, Mathf.Sin(seta) * Defined.over_speed);
+    }
+
     public float get_speed(int frame)// 0<= frame <= jump_frame_max
     {
         if (frame < 0 || frame > Defined.jump_frame_max)
-            return 0.001F;
-        return (-0.0005F / 576) * frame * frame + 0.0005F;
+            return 0.007F;
+        frame = frame - Defined.jump_frame_max / 2;
+        //float double_x = (Defined.jump_frame_max / 2) * (Defined.jump_frame_max / 2);
+        return (0.02F / 900) * frame * frame - 0.02F;
     }
 
     public Vector2 get_texture_mid_point(Texture2D target, float scale, float target_part_size)

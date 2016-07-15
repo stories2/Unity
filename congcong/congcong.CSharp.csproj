@@ -66,13 +66,17 @@
     <Compile Include="Assets\Source\BufferManager\DrawNode.cs" />
     <Compile Include="Assets\Source\BufferManager\GraphicNode.cs" />
     <Compile Include="Assets\Source\BufferManager\ItemNode.cs" />
+    <Compile Include="Assets\Source\BufferManager\NetNode.cs" />
     <Compile Include="Assets\Source\DefineManager\Defined.cs" />
     <Compile Include="Assets\Source\IoManager\FileManager.cs" />
     <Compile Include="Assets\Source\IoManager\ResourceManager.cs" />
     <Compile Include="Assets\Source\IoManager\TouchManager.cs" />
     <Compile Include="Assets\Source\MainManager.cs" />
     <Compile Include="Assets\Source\MenuManager\GameMenu.cs" />
+    <Compile Include="Assets\Source\MenuManager\RankMenu.cs" />
+    <Compile Include="Assets\Source\MenuManager\ScoreMenu.cs" />
     <Compile Include="Assets\Source\MenuManager\StartMenu.cs" />
+    <Compile Include="Assets\Source\NetworkManager\CommunicateManager.cs" />
     <Compile Include="Assets\Source\ProcessManager\ConvertManager.cs" />
     <Compile Include="Assets\Source\ViewManager\DrawManager.cs" />
     <Compile Include="Assets\Source\ViewManager\ViewManager.cs" />

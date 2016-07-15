@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class StartMenu : MonoBehaviour {
+public class ScoreMenu : MonoBehaviour {
 
     public delegate void ChangeMenu(int menu_id);
 
@@ -11,18 +11,20 @@ public class StartMenu : MonoBehaviour {
     ItemNode draw_front = null, draw_rear = null;
     ChangeMenu change_menu;
 
-	// Use this for initialization
-	void Start () {
-	
+    // Use this for initialization
+    void Start()
+    {
+
         r_flag = true;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-        if(show)
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+        if (show)
         {
-            if(r_flag == true)
+            if (r_flag == true)
             {
                 r_flag = false;
 
@@ -30,18 +32,18 @@ public class StartMenu : MonoBehaviour {
 
                 add(0.0F, 0.0F, 0.0F, new Rect(convert_manager.convert_to_bigger_position(new Vector2(0.2F, 0.4F)),
                     convert_manager.convert_to_bigger_position(new Vector2(0.6F, 0.2F))), new Rect(), false, null,
-                    10, 0, "Start Game", null, GUI.Button, null, null);
+                    10, 0, "Score ", GUI.Label, null, null, null);
 
                 add(0.0F, 0.0F, 0.0F, new Rect(convert_manager.convert_to_bigger_position(new Vector2(0.0F, 0.8F)),
                     convert_manager.convert_to_bigger_position(new Vector2(0.5F, 0.2F))), new Rect(), false, null,
-                    9, 0, "Rank", null, GUI.Button, null, null);
+                    9, 0,  "Share", null, GUI.Button, null, null);
 
                 add(0.0F, 0.0F, 0.0F, new Rect(convert_manager.convert_to_bigger_position(new Vector2(0.5F, 0.8F)),
                     convert_manager.convert_to_bigger_position(new Vector2(0.5F, 0.2F))), new Rect(), false, null,
-                    8, 0, "Friend", null, GUI.Button, null, null);
+                    8, 0, "Re Game", null, GUI.Button, null, null);
 
-            /*    DrawNode node = draw_manager.get_draw_node(1);
-                Debug.Log("pos "+node.get_position());*/
+                /*    DrawNode node = draw_manager.get_draw_node(1);
+                    Debug.Log("pos "+node.get_position());*/
             }
             ItemNode node = draw_front;
             DrawNode draw_node = null;
@@ -56,49 +58,54 @@ public class StartMenu : MonoBehaviour {
 
             //i/o
             int node_num = 0;
-            while(node)
+            while (node)
             {
                 node_num += 1;
                 draw_node = draw_manager.get_draw_node(node.get_data());
-                if(draw_node.get_return_event() == true)
+                if (draw_node.get_return_event() == true)
                 {
                     node_id = node.get_data();
                     Debug.Log("node #" + node_id + " event ok");
-                    if(node_num == 1)
+                    if (node_num == 1)
                     {
                         //r_flag = false;
-                        show = false;
-                        all_del();
-                        change_menu(2);
-                        Destroy(this);
-                        break;
+                        //show = false;
                     }
                     else if(node_num == 2)
                     {
-                        show = false;
-                        all_del();
-                        change_menu(4);
-                        Destroy(this);
-                        break;
+
                     }
+                    else if(node_num == 3)
+                    {
+                        change_menu(2);
+                    }
+                    all_del();
+                    Destroy(this);
                 }
                 node = node.get_link();
             }
         }
         else
         {
-            if(r_flag == false)
+            /*if (r_flag == false)
             {
                 //r_flag = true;
 
-            }
+                int node_id;
+                while ((node_id = del()) != 0)
+                {
+                    draw_manager.search_del(node_id);
+                }
+                change_menu(2);
+                Destroy(this);
+            }*/
         }
-	}
+    }
 
     public void all_del()
     {
-        int node_id;
-        while((node_id = del()) != 0)
+        int node_id = 0;
+        while ((node_id = del()) != 0)
         {
             draw_manager.search_del(node_id);
         }
@@ -131,11 +138,11 @@ public class StartMenu : MonoBehaviour {
         DrawNode.DrawFunc_toggle func_toggle)
     {
         ItemNode node = gameObject.AddComponent<ItemNode>();
-        if(node)
+        if (node)
         {
             int node_id = draw_manager.add(return_val, min, max, pos, add_on_pos, return_event, texture, deep, id, banner, func_label, func_box, func_texture, func_toggle);
             node.set_data(node_id);
-            if(draw_front)
+            if (draw_front)
             {
                 draw_rear.set_link(node);
             }
@@ -145,10 +152,8 @@ public class StartMenu : MonoBehaviour {
             }
             draw_rear = node;
         }
-        
+
     }
-
-
 
     public void set_convert_manager(ConvertManager convert_manager)
     {

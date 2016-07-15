@@ -9,6 +9,9 @@ public class MainManager : MonoBehaviour {
     ConvertManager convert_manager;
     StartMenu start_menu;
     GameMenu game_menu;
+    ScoreMenu score_menu;
+    RankMenu rank_menu;
+    public Camera camera;
 
     bool r_flag;
 	// Use this for initialization
@@ -49,7 +52,7 @@ public class MainManager : MonoBehaviour {
             touch_manager.init(touch_event_manager);
             convert_manager.init();
 
-            create_menu(2);
+            create_menu(1);
             /*Texture2D test = file_manager.get_resource(2);
 
             view_manager.get_draw_manager().add(0.0F, 0.0F, 0.0F, new Rect(100, 0, 100, 50), new Rect(0, 0, 0, 0), false, null, 2, 0, "hello world",
@@ -61,6 +64,14 @@ public class MainManager : MonoBehaviour {
                 null, Graphics.DrawTexture, null);*/
         }        
 	}
+
+    void OnGUI()
+    {
+        if(Defined.screen_captured != null)
+        {
+            Graphics.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), Defined.screen_captured);
+        }
+    }
 
     public void create_menu(int menu_id)
     {
@@ -87,8 +98,40 @@ public class MainManager : MonoBehaviour {
             game_menu.set_draw_manager(view_manager.get_draw_manager());
             game_menu.set_convert_manager(convert_manager);
             game_menu.set_file_manager(file_manager);
+            game_menu.set_camera(camera);
+            game_menu.set_take_cap_func(start_capture);
+            view_manager.set_capture(game_menu.take_a_screen_shot);
             game_menu.set_show(true);
         }
+        if (menu_id == 3)
+        {
+            if (score_menu)
+            {
+                Destroy(score_menu);
+            }
+            score_menu = gameObject.AddComponent<ScoreMenu>();
+            score_menu.set_change_menu(create_menu);
+            score_menu.set_draw_manager(view_manager.get_draw_manager());
+            score_menu.set_convert_manager(convert_manager);
+            score_menu.set_show(true);
+        }
+        if(menu_id == 4)
+        {
+            if(rank_menu)
+            {
+                Destroy(rank_menu);
+            }
+            rank_menu = gameObject.AddComponent<RankMenu>();
+            rank_menu.set_change_menu(create_menu);
+            rank_menu.set_draw_manager(view_manager.get_draw_manager());
+            rank_menu.set_convert_manager(convert_manager);
+            rank_menu.set_show(true);
+        }
+    }
+
+    public void start_capture()
+    {
+        view_manager.set_take_it();
     }
 
     public void touch_event_manager(Vector2 pos, int finger_id, TouchPhase action)

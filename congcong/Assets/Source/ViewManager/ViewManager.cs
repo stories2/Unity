@@ -3,10 +3,15 @@ using System.Collections;
 
 public class ViewManager : MonoBehaviour {
 
+    public delegate Texture2D screen_capture();
+
     DrawManager draw_manager = null;
+    screen_capture capture;
+    bool take_it = false;
 	// Use this for initialization
 	void Start () {
 
+        take_it = false;
         init();
 	}
 
@@ -23,6 +28,16 @@ public class ViewManager : MonoBehaviour {
     public void init()
     {
         draw_manager = gameObject.AddComponent<DrawManager>();
+    }
+
+    public void set_capture(screen_capture capture)
+    {
+        this.capture += capture;
+    }
+
+    public void set_take_it()
+    {
+        take_it = true;
     }
 
     void OnGUI()
@@ -63,6 +78,11 @@ public class ViewManager : MonoBehaviour {
                 //Debug.Log("toggle");
             }
             node = node.get_link();
+        }
+        if(take_it)
+        {
+            take_it = false;
+            Defined.screen_captured = capture();
         }
     }
 }

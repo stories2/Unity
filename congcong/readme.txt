@@ -1,3 +1,10 @@
+20160715
+NetNode 에는 웹 url 링크 주소와 그 링크를 실행했을때의 결과값이 담기는 노드이다
+CommunicateManager 에는 네트워크 연동하는데 쓰이는 컨트롤 메소드가 탑재되어 있다
+RankMenu 에는 TOP 10 명의 랭크가 보여주는 기능을 갖고 있다
+ScoreMenu 에는 GameMenu가 끝났을때의 화면이 출력된다
+GameMenu 에는 캐릭터가 움직이는 중력을 계산하는 2차함수가 업데이트 되었다
+
 20160714
 ItemNode에는 int 형 데이터가 담겨 그래픽 프로세싱 번호를 저장한다
 Defined 에 draw jump max 변수는 2차함수를 이용한 frame per speed 의 최대값을 지정한다
