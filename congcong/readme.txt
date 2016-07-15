@@ -4,6 +4,156 @@ CommunicateManager 에는 네트워크 연동하는데 쓰이는 컨트롤 메소드가 탑재되어 있다
 RankMenu 에는 TOP 10 명의 랭크가 보여주는 기능을 갖고 있다
 ScoreMenu 에는 GameMenu가 끝났을때의 화면이 출력된다
 GameMenu 에는 캐릭터가 움직이는 중력을 계산하는 2차함수가 업데이트 되었다
+서버는 lamb.kangnam.ac.kr 을 사용하며 DB 셋팅을 임시적으로 완료하였다
+login as: root
+root@lamb.kangnam.ac.kr's password:
+Last failed login: Fri Jul 15 20:28:29 KST 2016 from 112.175.103.29 on ssh:notty
+There were 15049 failed login attempts since the last successful login.
+Last login: Tue Jul 12 15:44:10 2016 from 61.43.139.4
+[root@localhost ~]# mysql -u root -p
+Enter password:
+
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+
+Your MariaDB connection id is 37807
+Server version: 5.5.39-MariaDB MariaDB Server
+
+Copyright (c) 2000, 2014, Oracle, Monty Program Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]>
+MariaDB [(none)]>
+MariaDB [(none)]>
+MariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| project_backup     |
+| shcho              |
+| tetris             |
+| wiki_category      |
+| wiki_latest_page   |
++--------------------+
+8 rows in set (0.17 sec)
+
+MariaDB [(none)]> create databases congcong default charset = utf8;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'databases congcong default charset = utf8' at line 1
+MariaDB [(none)]> create database congcong default charset = utf8;
+Query OK, 1 row affected (0.02 sec)
+
+MariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| congcong           |
+| mysql              |
+| performance_schema |
+| project_backup     |
+| shcho              |
+| tetris             |
+| wiki_category      |
+| wiki_latest_page   |
++--------------------+
+9 rows in set (0.00 sec)
+
+MariaDB [(none)]> use congcong;
+Database changed
+MariaDB [congcong]> create table user (MacAddress text, PlayerId int not null primary_key auto increment, InstallTime timestamp default now(), ConnectTime timestamp, EOGTime timestamp, LastPlayTime timestamp, FaceBookId text);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'auto increment, InstallTime timestamp default now(), ConnectTime timestamp, EOGT' at line 1
+MariaDB [congcong]> create table user (MacAddress text, PlayerId int not null primary key auto_increment, InstallTime timestamp default now(), ConnectTime timestamp, EOGTime timestamp, LastPlayTime timestamp, FaceBookId text);
+Query OK, 0 rows affected (0.34 sec)
+
+MariaDB [congcong]> desc rank;
+ERROR 1146 (42S02): Table 'congcong.rank' doesn't exist
+MariaDB [congcong]> desc user;
++--------------+-----------+------+-----+---------------------+----------------+
+| Field        | Type      | Null | Key | Default             | Extra          |
++--------------+-----------+------+-----+---------------------+----------------+
+| MacAddress   | text      | YES  |     | NULL                |                |
+| PlayerId     | int(11)   | NO   | PRI | NULL                | auto_increment |
+| InstallTime  | timestamp | NO   |     | CURRENT_TIMESTAMP   |                |
+| ConnectTime  | timestamp | NO   |     | 0000-00-00 00:00:00 |                |
+| EOGTime      | timestamp | NO   |     | 0000-00-00 00:00:00 |                |
+| LastPlayTime | timestamp | NO   |     | 0000-00-00 00:00:00 |                |
+| FaceBookId   | text      | YES  |     | NULL                |                |
++--------------+-----------+------+-----+---------------------+----------------+
+7 rows in set (0.04 sec)
+
+MariaDB [congcong]> create table rank (PlayerId int , Score int default 0, UpdateScoreTime timestamp default now());
+Query OK, 0 rows affected (0.08 sec)
+
+MariaDB [congcong]> desc rank;
++-----------------+-----------+------+-----+-------------------+-------+
+| Field           | Type      | Null | Key | Default           | Extra |
++-----------------+-----------+------+-----+-------------------+-------+
+| PlayerId        | int(11)   | YES  |     | NULL              |       |
+| Score           | int(11)   | YES  |     | 0                 |       |
+| UpdateScoreTime | timestamp | NO   |     | CURRENT_TIMESTAMP |       |
++-----------------+-----------+------+-----+-------------------+-------+
+3 rows in set (0.00 sec)
+
+MariaDB [congcong]> alter table rank modify PlayerId int not null primary key;
+Query OK, 0 rows affected (0.28 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [congcong]> desc rank;
++-----------------+-----------+------+-----+-------------------+-------+
+| Field           | Type      | Null | Key | Default           | Extra |
++-----------------+-----------+------+-----+-------------------+-------+
+| PlayerId        | int(11)   | NO   | PRI | NULL              |       |
+| Score           | int(11)   | YES  |     | 0                 |       |
+| UpdateScoreTime | timestamp | NO   |     | CURRENT_TIMESTAMP |       |
++-----------------+-----------+------+-----+-------------------+-------+
+3 rows in set (0.00 sec)
+
+MariaDB [congcong]> create table friend (PlayerId int not null primary key, FriendId int not null, UpdateTime timestamp default now(), Broke bool default false);
+Query OK, 0 rows affected (0.09 sec)
+
+MariaDB [congcong]> desc friend;
++------------+------------+------+-----+-------------------+-------+
+| Field      | Type       | Null | Key | Default           | Extra |
++------------+------------+------+-----+-------------------+-------+
+| PlayerId   | int(11)    | NO   | PRI | NULL              |       |
+| FriendId   | int(11)    | NO   |     | NULL              |       |
+| UpdateTime | timestamp  | NO   |     | CURRENT_TIMESTAMP |       |
+| Broke      | tinyint(1) | YES  |     | 0                 |       |
++------------+------------+------+-----+-------------------+-------+
+4 rows in set (0.01 sec)
+
+MariaDB [congcong]>
+
+또한 DB 연동을 위한 php 위치를 지정하였다
+login as: root
+root@lamb.kangnam.ac.kr's password:
+Access denied
+root@lamb.kangnam.ac.kr's password:
+Last failed login: Fri Jul 15 21:32:14 KST 2016 from 118.130.99.186 on ssh:notty
+There was 1 failed login attempt since the last successful login.
+Last login: Fri Jul 15 21:06:52 2016 from 118.130.99.186
+[root@localhost ~]#
+[root@localhost ~]#
+[root@localhost ~]#
+[root@localhost ~]# ls -l
+합계 4
+-rw-------. 1 root root 1076  3월 16 06:11 anaconda-ks.cfg
+[root@localhost ~]# cd /home/stories2/html/
+[root@localhost html]# ls -l
+합계 1956
+-rw-r--r--  1 stories2 stories2 1989455  6월 18 12:24 Desktop.unity3d
+-rw-r--r--  1 stories2 stories2    3305  6월 18 12:24 index.html
+-rw-r--r--. 1 root     root          21  4월  9 09:38 info.php
+lrwxrwxrwx. 1 root     root          22  4월  9 09:41 mysql -> /usr/share/phpMyAdmin/
+drwxr-xr-x  6 stories2 stories2    4096  4월 26 01:06 project_backup
+[root@localhost html]# mkdir congcong
+[root@localhost html]# cd congcong/
+[root@localhost congcong]# vim index.php
+[root@localhost congcong]#
+
 
 20160714
 ItemNode에는 int 형 데이터가 담겨 그래픽 프로세싱 번호를 저장한다
