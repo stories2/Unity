@@ -12,6 +12,7 @@ public class MainManager : MonoBehaviour {
     ScoreMenu score_menu;
     RankMenu rank_menu;
     public Camera camera;
+    CommunicateManager communication_manager;
 
     bool r_flag;
 	// Use this for initialization
@@ -26,6 +27,8 @@ public class MainManager : MonoBehaviour {
         this.view_manager = gameObject.AddComponent<ViewManager>();
         this.touch_manager = gameObject.AddComponent<TouchManager>();
         this.convert_manager = gameObject.AddComponent<ConvertManager>();
+        communication_manager = gameObject.AddComponent<CommunicateManager>();
+        //communication_manager.add("http://lamb.kangnam.ac.kr/congcong/index.php");
         //this.start_menu = gameObject.AddComponent<StartMenu>();
 
         //view_manager.get_draw_manager().add()
@@ -75,7 +78,7 @@ public class MainManager : MonoBehaviour {
 
     public void create_menu(int menu_id)
     {
-        if(menu_id == 1)
+        if(menu_id == 1)//start menu
         {
             if(start_menu)
             {
@@ -85,9 +88,11 @@ public class MainManager : MonoBehaviour {
             start_menu.set_change_menu(create_menu);
             start_menu.set_draw_manager(view_manager.get_draw_manager());
             start_menu.set_convert_manager(convert_manager);
+            start_menu.set_communication_manager(communication_manager);
+            start_menu.set_communication_func(communication_manager.wait_for_respone);
             start_menu.set_show(true);
         }
-        if(menu_id == 2)
+        if(menu_id == 2)//game menu
         {
             if(game_menu)
             {
@@ -101,9 +106,10 @@ public class MainManager : MonoBehaviour {
             game_menu.set_camera(camera);
             game_menu.set_take_cap_func(start_capture);
             view_manager.set_capture(game_menu.take_a_screen_shot);
+            
             game_menu.set_show(true);
         }
-        if (menu_id == 3)
+        if (menu_id == 3)//score menu
         {
             if (score_menu)
             {
@@ -115,7 +121,7 @@ public class MainManager : MonoBehaviour {
             score_menu.set_convert_manager(convert_manager);
             score_menu.set_show(true);
         }
-        if(menu_id == 4)
+        if(menu_id == 4)//rank menu
         {
             if(rank_menu)
             {

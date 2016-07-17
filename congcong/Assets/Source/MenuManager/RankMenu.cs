@@ -11,7 +11,6 @@ public class RankMenu : MonoBehaviour {
     ConvertManager convert_manager;
     ItemNode draw_front = null, draw_rear = null;
     ChangeMenu change_menu;
-    CommunicateManager communicate;
 
     // Use this for initialization
     void Start()
@@ -41,9 +40,6 @@ public class RankMenu : MonoBehaviour {
                 add(0.0F, 0.0F, 0.0F, new Rect(convert_manager.convert_to_bigger_position(new Vector2(0.5F, 0.8F)),
                     convert_manager.convert_to_bigger_position(new Vector2(0.5F, 0.2F))), new Rect(), false, null,
                     8, 0, "Friend", null, GUI.Button, null, null);
-
-                communicate = gameObject.AddComponent<CommunicateManager>();
-                communicate.add("http://lamb.kangnam.ac.kr/congcong/index.php");
             }
             ItemNode node = draw_front;
             DrawNode draw_node = null;

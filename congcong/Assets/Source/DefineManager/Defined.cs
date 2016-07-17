@@ -8,6 +8,7 @@ public class Defined : MonoBehaviour {
         jump_frame_max = 15*2;
     public static float over_speed = 0.002F, minimum_speed = 0.003F;
     public static Texture2D screen_captured;
+    public static long delay_time_limit = 5000L;
 
 	// Use this for initialization
 	void Start () {

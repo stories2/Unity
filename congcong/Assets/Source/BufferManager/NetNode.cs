@@ -7,6 +7,16 @@ public class NetNode : MonoBehaviour {
     NetNode next_link;
     bool updated = false;
 
+    public bool get_updated()
+    {
+        return updated;
+    }
+
+    public void set_updated(bool updated)
+    {
+        this.updated = updated;
+    }
+
     public string get_result()
     {
         return result;

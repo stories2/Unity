@@ -4,12 +4,15 @@ using System.Collections;
 public class StartMenu : MonoBehaviour {
 
     public delegate void ChangeMenu(int menu_id);
+    public delegate NetNode communicate(NetNode target, long time_limit);
 
     bool show = false, r_flag = true;
     DrawManager draw_manager;
     ConvertManager convert_manager;
     ItemNode draw_front = null, draw_rear = null;
     ChangeMenu change_menu;
+    CommunicateManager communication_manager;
+    communicate communicate_func;
 
 	// Use this for initialization
 	void Start () {
@@ -40,6 +43,15 @@ public class StartMenu : MonoBehaviour {
                     convert_manager.convert_to_bigger_position(new Vector2(0.5F, 0.2F))), new Rect(), false, null,
                     8, 0, "Friend", null, GUI.Button, null, null);
 
+                
+                string mac = communication_manager.get_mac();
+                NetNode net_node = communication_manager.add("arg0=new_bee&arg1=" + mac);
+                //communicate_func(net_node, Defined.delay_time_limit);
+                //communication_manager.del();
+
+                net_node = communication_manager.add("arg0=update_time&arg1=" + mac + "&arg2=ConnectTime");
+               // communicate_func(net_node, Defined.delay_time_limit);
+                //communication_manager.del();
             /*    DrawNode node = draw_manager.get_draw_node(1);
                 Debug.Log("pos "+node.get_position());*/
             }
@@ -94,6 +106,16 @@ public class StartMenu : MonoBehaviour {
             }
         }
 	}
+
+    public void set_communication_func(communicate communicate_target)
+    {
+        this.communicate_func = communicate_target;
+    }
+
+    public void set_communication_manager(CommunicateManager communication_manager)
+    {
+        this.communication_manager = communication_manager;
+    }
 
     public void all_del()
     {
