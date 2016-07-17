@@ -1,3 +1,30 @@
+20160718
+본격적으로 CommunicationManager를 이용한 웹 통신이 가능해졌다
+StartMenu 에 자신의 정보와 필요한 데이터 업데이트를 하는 메소드가 정상작동하는것 까지 확인하였다
+
+MariaDB [congcong]> alter table user add unique index (MacAddress);
+Query OK, 0 rows affected (0.18 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [congcong]> desc user;
++--------------+-------------+------+-----+---------------------+----------------+
+| Field        | Type        | Null | Key | Default             | Extra          |
++--------------+-------------+------+-----+---------------------+----------------+
+| MacAddress   | varchar(12) | YES  | UNI | NULL                |                |
+| PlayerId     | int(11)     | NO   | PRI | NULL                | auto_increment |
+| InstallTime  | timestamp   | NO   |     | CURRENT_TIMESTAMP   |                |
+| ConnectTime  | timestamp   | NO   |     | 0000-00-00 00:00:00 |                |
+| EOGTime      | timestamp   | NO   |     | 0000-00-00 00:00:00 |                |
+| LastPlayTime | timestamp   | NO   |     | 0000-00-00 00:00:00 |                |
+| FaceBookId   | text        | YES  |     | NULL                |                |
++--------------+-------------+------+-----+---------------------+----------------+
+7 rows in set (0.00 sec)
+를 통해 user 의 MacAddress 는 중복되는 값이 저장되지 않는다
+http://lamb.kangnam.ac.kr/congcong/index.php 는 DB와 클라이언트 사이에서 관제 하는 역활을 한다
+매개변수들 중 0번째는 무조건 사용할 함수 명이 나오며 그 이후에는 그 함수가 작동하는데 필요로 하는 파라미터
+가 들어오게 된다
+
+
 20160715
 NetNode 에는 웹 url 링크 주소와 그 링크를 실행했을때의 결과값이 담기는 노드이다
 CommunicateManager 에는 네트워크 연동하는데 쓰이는 컨트롤 메소드가 탑재되어 있다
