@@ -54,6 +54,7 @@ public class StartMenu : MonoBehaviour {
                 //communication_manager.del();
             /*    DrawNode node = draw_manager.get_draw_node(1);
                 Debug.Log("pos "+node.get_position());*/
+
             }
             ItemNode node = draw_front;
             DrawNode draw_node = null;
@@ -90,6 +91,14 @@ public class StartMenu : MonoBehaviour {
                         show = false;
                         all_del();
                         change_menu(4);
+                        Destroy(this);
+                        break;
+                    }
+                    else if(node_num == 3)
+                    {
+                        show = false;
+                        all_del();
+                        change_menu(5);
                         Destroy(this);
                         break;
                     }

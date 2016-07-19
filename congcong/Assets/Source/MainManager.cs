@@ -13,6 +13,8 @@ public class MainManager : MonoBehaviour {
     RankMenu rank_menu;
     public Camera camera;
     CommunicateManager communication_manager;
+    FriendMenu friend_menu;
+    FacebookMenu facebook_menu;
 
     bool r_flag;
 	// Use this for initialization
@@ -55,7 +57,7 @@ public class MainManager : MonoBehaviour {
             touch_manager.init(touch_event_manager);
             convert_manager.init();
 
-            create_menu(1);
+            create_menu(6);
             /*Texture2D test = file_manager.get_resource(2);
 
             view_manager.get_draw_manager().add(0.0F, 0.0F, 0.0F, new Rect(100, 0, 100, 50), new Rect(0, 0, 0, 0), false, null, 2, 0, "hello world",
@@ -132,6 +134,34 @@ public class MainManager : MonoBehaviour {
             rank_menu.set_draw_manager(view_manager.get_draw_manager());
             rank_menu.set_convert_manager(convert_manager);
             rank_menu.set_show(true);
+        }
+        if(menu_id == 5)//friend menu
+        {
+            if (friend_menu)
+            {
+                Destroy(friend_menu);
+            }
+            friend_menu = gameObject.AddComponent<FriendMenu>();
+            friend_menu.set_change_menu(create_menu);
+            friend_menu.set_draw_manager(view_manager.get_draw_manager());
+            friend_menu.set_convert_manager(convert_manager);
+            friend_menu.set_communication_manager(communication_manager);
+            friend_menu.set_communication_func(communication_manager.wait_for_respone);
+            friend_menu.set_show(true);
+        }
+        if(menu_id == 6)
+        {
+            if (facebook_menu)
+            {
+                Destroy(facebook_menu);
+            }
+            facebook_menu = gameObject.AddComponent<FacebookMenu>();
+            facebook_menu.set_change_menu(create_menu);
+            facebook_menu.set_draw_manager(view_manager.get_draw_manager());
+            facebook_menu.set_convert_manager(convert_manager);
+            facebook_menu.set_communication_manager(communication_manager);
+            facebook_menu.set_communication_func(communication_manager.wait_for_respone);
+            facebook_menu.set_show(true);
         }
     }
 

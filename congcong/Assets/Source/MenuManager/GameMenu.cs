@@ -6,7 +6,7 @@ public class GameMenu : MonoBehaviour {
     public delegate void ChangeMenu(int menu_id);
     public delegate void take_screen_shot();
 
-    bool show = false, r_flag = true;
+    bool show = false, r_flag = true, pass = false;
     DrawManager draw_manager;
     ConvertManager convert_manager;
     ItemNode draw_front = null, draw_rear = null;
@@ -69,14 +69,16 @@ public class GameMenu : MonoBehaviour {
                 draw_y = y - draw_pos.y;
 
                 add(0.0F, 0.0F, 0.0F, new Rect(convert_manager.convert_to_bigger_position(new Vector2(draw_x, draw_y)),
-                    new Vector2(width, height)), new Rect(1.0F / 4, 3.0F / 4, 1.0F / 4, 1.0F / 4), false, door, 19, 0, "", null, null, Graphics.DrawTexture, null);
+                    new Vector2(width, height)), new Rect(1.0F / 4, (float)Random.Range(1,4) / 4, 1.0F / 4, 1.0F / 4), false, door, 19, 0, "", null, null, Graphics.DrawTexture, null);
 
                 door_control = draw_manager.get_draw_node(draw_rear.get_data());
 
                 /*
                  * 주인공 컨트롤
                  */
-                Texture2D me = file_manager.get_resource(1);
+                int ran = Random.Range(1, 4);
+                Debug.Log("ran : " + ran);
+                Texture2D me = file_manager.get_resource(ran);
 
                 scale = convert_manager.get_scale(me, new Vector2(0.05F, 0.0F), me.width / 4);//(float)convert_manager.convert_to_bigger_position(new Vector2(0.2F, 0.0F)).x / ((float)me.width / 4.0F);
 
@@ -112,10 +114,12 @@ public class GameMenu : MonoBehaviour {
             if (convert_manager.convert_to_smaller_position(new Vector2(door_pos.x, door_pos.y)).x < 0.4F)
             {
                 Debug.Log("Game Over");
+                delay = 0;
                 show = false;
                 //delay = 0;
                 //take_screen_cap();
             }                
+            
 
             //anime
             if(frame % 10 == 0)
@@ -139,10 +143,24 @@ public class GameMenu : MonoBehaviour {
             width_height = new Vector2(pos.width, pos.height);
             x_y = convert_manager.convert_to_smaller_position(x_y);
             x_y.y = x_y.y + convert_manager.get_speed(jump_frame) + move_speed.y;
+
+            if(door_pos.x < pos.x && pos.x <= door_pos.x + door_pos.width && door_pos.y < pos.y && pos.y < door_pos.y + door_pos.height)
+            {
+                Debug.Log("ok");
+                delay = 0;
+                show = false;
+                pass = true;
+            }
             
             if(x_y.y < 0.0F)
             {
                 x_y.y = 0.0F;
+            }
+            if(x_y.y > 1.0F)
+            {
+                Debug.Log("Game Over");
+                delay = 0;
+                show = false;
             }
             x_y = convert_manager.convert_to_bigger_position(x_y);
             main_character.set_position(new Rect(x_y, width_height));
@@ -164,7 +182,7 @@ public class GameMenu : MonoBehaviour {
         }
         else
         {
-            if (r_flag == false)
+            if (r_flag == false && delay > 60)
             {
                 //r_flag = true;
 
@@ -175,9 +193,17 @@ public class GameMenu : MonoBehaviour {
                 {
                     draw_manager.search_del(node_id);
                 }
-                change_menu(3);
+                if(pass == true)
+                {
+                    change_menu(2);
+                }
+                else
+                {
+                    change_menu(3);
+                }
                 Destroy(this);
             }
+            delay += 1;
         }
     }
 
