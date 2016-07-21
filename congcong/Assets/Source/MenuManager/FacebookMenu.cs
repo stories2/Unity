@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using Facebook.Unity;
+using System.Collections;
 using System.Collections.Generic;
+using System;
 
 
 public class FacebookMenu : MonoBehaviour {
@@ -16,6 +19,10 @@ public class FacebookMenu : MonoBehaviour {
     ChangeMenu change_menu;
     CommunicateManager communication_manager;
     communicate communicate_func;
+    Texture2D userPicture;
+    string lastName, firstName;
+
+    public string AppLinkURL { get; set; }
 
     // Use this for initialization
     void Start()
@@ -28,7 +35,14 @@ public class FacebookMenu : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+        //i/o
 
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            change_menu(1);
+            Destroy(this);
+        }
+        /*
         if (show)
         {
             if (r_flag == true)
@@ -40,30 +54,11 @@ public class FacebookMenu : MonoBehaviour {
                 add(0.0F, 0.0F, 0.0F, new Rect(convert_manager.convert_to_bigger_position(new Vector2(0.2F, 0.4F)),
                     convert_manager.convert_to_bigger_position(new Vector2(0.6F, 0.2F))), new Rect(), false, null,
                     10, 0, "FB Login", null, GUI.Button, null, null);
-
-                /*
-                string mac = communication_manager.get_mac();
-                NetNode net_node = communication_manager.add("arg0=new_bee&arg1=" + mac);
-                //communicate_func(net_node, Defined.delay_time_limit);
-                //communication_manager.del();
-
-                net_node = communication_manager.add("arg0=update_time&arg1=" + mac + "&arg2=ConnectTime");*/
-                // communicate_func(net_node, Defined.delay_time_limit);
-                //communication_manager.del();
-                /*    DrawNode node = draw_manager.get_draw_node(1);
-                    Debug.Log("pos "+node.get_position());*/
-
             }
             ItemNode node = draw_front;
             DrawNode draw_node = null;
             int node_id;
             //process
-            /*while (node)
-            {
-                draw_node = draw_manager.get_draw_node(node.get_data());
-
-                node = node.get_link();
-            }*/
 
             //i/o
             int node_num = 0;
@@ -77,29 +72,205 @@ public class FacebookMenu : MonoBehaviour {
                     Debug.Log("node #" + node_id + " event ok");
                     if (node_num == 1)
                     {
-                        //r_flag = false;
-                        /*
-                        show = false;
-                        all_del();
-                        change_menu(2);
-                        Destroy(this);
-                        break;*/
-
                         FBlogin();
                     }
                 }
                 node = node.get_link();
             }
+        }*/
+    }
+
+    void OnGUI()
+    {
+        if(FB.IsLoggedIn)
+        {
+            if(r_flag)
+            {
+                FB.API("/me?fields=first_name", HttpMethod.GET, GetUserFirstName);
+                FB.API("/me?fields=last_name", HttpMethod.GET, GetUserLastName);
+                FB.API("/me/picture?type=square&height=128&width=128", HttpMethod.GET, GetUserPicture);
+                FB.GetAppLink(GetAppLink);
+                r_flag = false;
+            }
+
+            if(userPicture)
+            {
+                Graphics.DrawTexture(new Rect(convert_manager.convert_to_bigger_position(new Vector2(0.05F, 0.1F)),
+                    convert_manager.convert_to_bigger_position(new Vector2(0.2F, 0.2F))), userPicture);
+                GUI.Label(new Rect(convert_manager.convert_to_bigger_position(new Vector2(0.05F, 0.3F)),
+                    convert_manager.convert_to_bigger_position(new Vector2(0.05F, 0.05F))), firstName);
+                GUI.Label(new Rect(convert_manager.convert_to_bigger_position(new Vector2(0.1F, 0.3F)),
+                    convert_manager.convert_to_bigger_position(new Vector2(0.1F, 0.05F))), lastName);
+
+                bool shareButtonPressed = GUI.Button(new Rect(convert_manager.convert_to_bigger_position(new Vector2(0.1F, 0.35F)),
+                    convert_manager.convert_to_bigger_position(new Vector2(0.8F, 0.1F))), "Share");
+
+                bool inviteButtonPressed = GUI.Button(new Rect(convert_manager.convert_to_bigger_position(new Vector2(0.1F, 0.45F)),
+                    convert_manager.convert_to_bigger_position(new Vector2(0.8F, 0.1F))), "Invite");
+
+                bool shareUsersButtonPressed = GUI.Button(new Rect(convert_manager.convert_to_bigger_position(new Vector2(0.1F, 0.55F)),
+                    convert_manager.convert_to_bigger_position(new Vector2(0.8F, 0.1F))), "ShareUser");
+
+                if(shareButtonPressed)
+                {
+                    ShareToFaceBook();
+                }
+
+                if(inviteButtonPressed)
+                {
+                    InviteFriend();
+                }
+
+                if(shareUsersButtonPressed)
+                {
+                    ShareWithUsers();
+                }
+            }
         }
         else
         {
-            if (r_flag == false)
+            if (GUI.Button(new Rect(convert_manager.convert_to_bigger_position(new Vector2(0.2F, 0.4F)),
+                convert_manager.convert_to_bigger_position(new Vector2(0.6F, 0.2F))), "login"))
             {
-                //r_flag = true;
-
+                FBlogin();
             }
         }
     }
+
+    public void GetAppLink(IAppLinkResult result)
+    {
+        if(!string.IsNullOrEmpty (result.Url))
+        {
+            AppLinkURL = "" + result.Url + "";
+            Debug.Log(AppLinkURL);  
+        }
+        else
+        {
+            AppLinkURL = "http://google.com";
+        }
+    }
+
+    public void ShareWithUsers()
+    {
+        FB.AppRequest(
+            "ASDFASDF",
+            null,
+            new List<object>() { "app_users" },
+            null,
+            null,
+            null,
+            null,
+            ShareWithUsersCallBack);
+    }
+
+    public void ShareWithUsersCallBack(IAppRequestResult result)
+    {
+        if (result.Cancelled)
+        {
+            Debug.Log("ShareUsers Cancel");
+        }
+        else if (!string.IsNullOrEmpty(result.Error))
+        {
+            Debug.Log(result.Error);
+        }
+        else if (!string.IsNullOrEmpty(result.RawResult))
+        {
+            Debug.Log("ok");
+        }
+    }
+
+    public void ShareToFaceBook()
+    {
+        FB.FeedShare(
+            string.Empty,
+            new Uri(AppLinkURL),
+            "title",
+            "caption",
+            "게임 테스팅",
+            new Uri("http://lamb.kangnam.ac.kr/congcong/nyan.gif"),
+            string.Empty,
+            ShareCallBack
+            );
+    }
+
+    public void ShareCallBack(IResult result)
+    {
+        if(result.Cancelled)
+        {
+            Debug.Log("Share Cancel");
+        }
+        else if(!string.IsNullOrEmpty(result.Error))
+        {
+            Debug.Log(result.Error);
+        }
+        else if(!string.IsNullOrEmpty(result.RawResult))
+        {
+            Debug.Log("ok");
+        }
+    }
+
+    public void InviteFriend()
+    {
+        FB.Mobile.AppInvite(
+            new Uri(AppLinkURL),
+            new Uri("http://lamb.kangnam.ac.kr/congcong/nyan.gif"),
+            InviteCallBack);
+    }
+
+    public void InviteCallBack(IResult result)
+    {
+        if (result.Cancelled)
+        {
+            Debug.Log("Invite Cancel");
+        }
+        else if (!string.IsNullOrEmpty(result.Error))
+        {
+            Debug.Log(result.Error);
+        }
+        else if (!string.IsNullOrEmpty(result.RawResult))
+        {
+            Debug.Log("ok");
+        }
+    }
+
+    public void GetUserPicture(IGraphResult result)
+    {
+        if(result.Texture)
+        {
+            userPicture = result.Texture;
+        }
+        else
+        {
+            Debug.Log(result.Texture);
+        }
+    }
+
+    public void GetUserLastName(IResult result)
+    {
+        if (result.Error == null)
+        {
+            lastName = result.ResultDictionary["last_name"].ToString();
+            Debug.Log(lastName);
+        }
+        else
+        {
+            Debug.Log(result.Error);
+        }
+    }
+
+    public void GetUserFirstName(IResult result)
+    {
+        if(result.Error == null)
+        {
+            firstName = result.ResultDictionary["first_name"].ToString();
+            Debug.Log(firstName);
+        }
+        else
+        {
+            Debug.Log(result.Error);
+        }
+    }
+
     public void FBlogin()
     {
         List<string> permissions = new List<string>();

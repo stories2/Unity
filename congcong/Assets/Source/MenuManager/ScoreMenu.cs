@@ -10,6 +10,7 @@ public class ScoreMenu : MonoBehaviour {
     ConvertManager convert_manager;
     ItemNode draw_front = null, draw_rear = null;
     ChangeMenu change_menu;
+    CommunicateManager communicate_manager;
 
     // Use this for initialization
     void Start()
@@ -42,6 +43,10 @@ public class ScoreMenu : MonoBehaviour {
                     convert_manager.convert_to_bigger_position(new Vector2(0.5F, 0.2F))), new Rect(), false, null,
                     8, 0, "Re Game", null, GUI.Button, null, null);
 
+                string mac = communicate_manager.get_mac();
+
+                communicate_manager.add("arg0=update_time&arg1=" + mac + "&arg2=LastPlayTime");
+
                 /*    DrawNode node = draw_manager.get_draw_node(1);
                     Debug.Log("pos "+node.get_position());*/
             }
@@ -57,6 +62,13 @@ public class ScoreMenu : MonoBehaviour {
             }*/
 
             //i/o
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                all_del();
+                change_menu(1);
+                Destroy(this);
+            }
             int node_num = 0;
             while (node)
             {
@@ -73,7 +85,7 @@ public class ScoreMenu : MonoBehaviour {
                     }
                     else if(node_num == 2)
                     {
-
+                        change_menu(6);
                     }
                     else if(node_num == 3)
                     {
@@ -100,6 +112,11 @@ public class ScoreMenu : MonoBehaviour {
                 Destroy(this);
             }*/
         }
+    }
+
+    public void set_communicate_manager(CommunicateManager communicate_manager)
+    {
+        this.communicate_manager = communicate_manager;
     }
 
     public void all_del()

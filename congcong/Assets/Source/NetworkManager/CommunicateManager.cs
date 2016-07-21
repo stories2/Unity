@@ -74,6 +74,17 @@ public class CommunicateManager : MonoBehaviour
         return true;
     }
 
+    public void all_del()
+    {
+        NetNode node;
+        while(front)
+        {
+            node = front;
+            front = front.get_next_link();
+            Destroy(node);
+        }
+    }
+
     public bool is_empty()
     {
         return front == null;

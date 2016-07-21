@@ -166,6 +166,13 @@ public class GameMenu : MonoBehaviour {
             main_character.set_position(new Rect(x_y, width_height));
 
             //i/o
+
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                change_menu(1);
+                Destroy(this);
+            }
             int i;
             for (i = 0; i < 2; i += 1)
             {

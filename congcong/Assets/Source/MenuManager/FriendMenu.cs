@@ -70,6 +70,13 @@ public class FriendMenu : MonoBehaviour {
             }*/
 
             //i/o
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                all_del();
+                change_menu(1);
+                Destroy(this);
+            }
             int node_num = 0;
             while (node)
             {

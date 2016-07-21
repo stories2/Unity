@@ -13,6 +13,7 @@ public class StartMenu : MonoBehaviour {
     ChangeMenu change_menu;
     CommunicateManager communication_manager;
     communicate communicate_func;
+    string mac;
 
 	// Use this for initialization
 	void Start () {
@@ -44,12 +45,11 @@ public class StartMenu : MonoBehaviour {
                     8, 0, "Friend", null, GUI.Button, null, null);
 
                 
-                string mac = communication_manager.get_mac();
-                NetNode net_node = communication_manager.add("arg0=new_bee&arg1=" + mac);
+                mac = communication_manager.get_mac();
                 //communicate_func(net_node, Defined.delay_time_limit);
                 //communication_manager.del();
 
-                net_node = communication_manager.add("arg0=update_time&arg1=" + mac + "&arg2=ConnectTime");
+                
                // communicate_func(net_node, Defined.delay_time_limit);
                 //communication_manager.del();
             /*    DrawNode node = draw_manager.get_draw_node(1);
@@ -68,6 +68,11 @@ public class StartMenu : MonoBehaviour {
             }*/
 
             //i/o
+            if(Input.GetKeyDown(KeyCode.Escape))
+            {
+                communication_manager.add("arg0=update_time&arg1=" + mac + "&arg2=EOGTime");
+                Application.Quit();
+            }
             int node_num = 0;
             while(node)
             {
@@ -77,6 +82,7 @@ public class StartMenu : MonoBehaviour {
                 {
                     node_id = node.get_data();
                     Debug.Log("node #" + node_id + " event ok");
+                    communication_manager.all_del();
                     if(node_num == 1)
                     {
                         //r_flag = false;

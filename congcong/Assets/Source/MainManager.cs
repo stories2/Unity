@@ -57,7 +57,11 @@ public class MainManager : MonoBehaviour {
             touch_manager.init(touch_event_manager);
             convert_manager.init();
 
-            create_menu(6);
+            string mac = communication_manager.get_mac();
+            communication_manager.add("arg0=new_bee&arg1=" + mac);
+            communication_manager.add("arg0=update_time&arg1=" + mac + "&arg2=ConnectTime");
+
+            create_menu(1);
             /*Texture2D test = file_manager.get_resource(2);
 
             view_manager.get_draw_manager().add(0.0F, 0.0F, 0.0F, new Rect(100, 0, 100, 50), new Rect(0, 0, 0, 0), false, null, 2, 0, "hello world",
@@ -121,6 +125,7 @@ public class MainManager : MonoBehaviour {
             score_menu.set_change_menu(create_menu);
             score_menu.set_draw_manager(view_manager.get_draw_manager());
             score_menu.set_convert_manager(convert_manager);
+            score_menu.set_communicate_manager(communication_manager);
             score_menu.set_show(true);
         }
         if(menu_id == 4)//rank menu
@@ -133,6 +138,7 @@ public class MainManager : MonoBehaviour {
             rank_menu.set_change_menu(create_menu);
             rank_menu.set_draw_manager(view_manager.get_draw_manager());
             rank_menu.set_convert_manager(convert_manager);
+            rank_menu.set_communicate_manager(communication_manager);
             rank_menu.set_show(true);
         }
         if(menu_id == 5)//friend menu
