@@ -15,6 +15,8 @@ public class MainManager : MonoBehaviour {
     CommunicateManager communication_manager;
     FriendMenu friend_menu;
     FacebookMenu facebook_menu;
+    bool state;
+    string error = "";
 
     bool r_flag;
 	// Use this for initialization
@@ -35,43 +37,56 @@ public class MainManager : MonoBehaviour {
 
         //view_manager.get_draw_manager().add()
         r_flag = true;
+        state = true;
     }
 	
 	// Update is called once per frame
 	void Update () {
 	
-        if(r_flag)
+        try
         {
-            r_flag = false;
 
-            file_manager.init();
-            if(file_manager.load_resource())
+            if (r_flag)
             {
-                Debug.Log("Load Ok");
-            }
-            else
-            {
-                Debug.Log("Load Error");
-            }
+                r_flag = false;
 
-            touch_manager.init(touch_event_manager);
-            convert_manager.init();
+                file_manager.init();
+                if (file_manager.load_resource())
+                {
+                    Debug.Log("Load Ok");
 
-            string mac = communication_manager.get_mac();
-            communication_manager.add("arg0=new_bee&arg1=" + mac);
-            communication_manager.add("arg0=update_time&arg1=" + mac + "&arg2=ConnectTime");
+                    touch_manager.init(touch_event_manager);
+                    convert_manager.init();
 
-            create_menu(1);
-            /*Texture2D test = file_manager.get_resource(2);
+                    string mac = communication_manager.get_mac();
+                    communication_manager.add("arg0=new_bee&arg1=" + mac);
+                    communication_manager.add("arg0=update_time&arg1=" + mac + "&arg2=ConnectTime");
 
-            view_manager.get_draw_manager().add(0.0F, 0.0F, 0.0F, new Rect(100, 0, 100, 50), new Rect(0, 0, 0, 0), false, null, 2, 0, "hello world",
-                null, null, null, GUI.Toggle);
-            view_manager.get_draw_manager().add(0.0F, 0.0F, 0.0F, new Rect(0, 0, 100, 50), new Rect(0, 0, 0, 0), false, null, 1, 0, "hello world",
-                null, GUI.Button, null, null);
+                    create_menu(1);
 
-            view_manager.get_draw_manager().add(0.0F, 0.0F, 0.0F, new Rect(200, 0, 32, 32), new Rect(1 / test.width, 1 / test.height, 1, 1), false, test, 3, 0, "", null,
-                null, Graphics.DrawTexture, null);*/
-        }        
+                    state = true;
+                }
+                else
+                {
+                    Debug.Log("Load Error");
+
+                    state = false;
+                }
+                /*Texture2D test = file_manager.get_resource(2);
+
+                view_manager.get_draw_manager().add(0.0F, 0.0F, 0.0F, new Rect(100, 0, 100, 50), new Rect(0, 0, 0, 0), false, null, 2, 0, "hello world",
+                    null, null, null, GUI.Toggle);
+                view_manager.get_draw_manager().add(0.0F, 0.0F, 0.0F, new Rect(0, 0, 100, 50), new Rect(0, 0, 0, 0), false, null, 1, 0, "hello world",
+                    null, GUI.Button, null, null);
+
+                view_manager.get_draw_manager().add(0.0F, 0.0F, 0.0F, new Rect(200, 0, 32, 32), new Rect(1 / test.width, 1 / test.height, 1, 1), false, test, 3, 0, "", null,
+                    null, Graphics.DrawTexture, null);*/
+            }    
+        }
+        catch(UnityException err)
+        {
+            state = false;
+        }    
 	}
 
     void OnGUI()
@@ -80,23 +95,34 @@ public class MainManager : MonoBehaviour {
         {
             Graphics.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), Defined.screen_captured);
         }
+        if(state)
+        {
+            GUI.Label(new Rect(0, 0, 100, 20), "Pass / " + error);
+        }
     }
 
     public void create_menu(int menu_id)
     {
         if(menu_id == 1)//start menu
         {
-            if(start_menu)
+            try
             {
-                Destroy(start_menu);
+                if (start_menu)
+                {
+                    Destroy(start_menu);
+                }
+                start_menu = gameObject.AddComponent<StartMenu>();
+                start_menu.set_change_menu(create_menu);
+                start_menu.set_draw_manager(view_manager.get_draw_manager());
+                start_menu.set_convert_manager(convert_manager);
+                start_menu.set_communication_manager(communication_manager);
+                start_menu.set_communication_func(communication_manager.wait_for_respone);
+                start_menu.set_show(true);
             }
-            start_menu = gameObject.AddComponent<StartMenu>();
-            start_menu.set_change_menu(create_menu);
-            start_menu.set_draw_manager(view_manager.get_draw_manager());
-            start_menu.set_convert_manager(convert_manager);
-            start_menu.set_communication_manager(communication_manager);
-            start_menu.set_communication_func(communication_manager.wait_for_respone);
-            start_menu.set_show(true);
+            catch(UnityException err)
+            {
+                error = err.ToString();
+            }
         }
         if(menu_id == 2)//game menu
         {

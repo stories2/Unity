@@ -13,7 +13,7 @@ public class StartMenu : MonoBehaviour {
     ChangeMenu change_menu;
     CommunicateManager communication_manager;
     communicate communicate_func;
-    string mac;
+    string mac, error = "";
 
 	// Use this for initialization
 	void Start () {
@@ -26,90 +26,98 @@ public class StartMenu : MonoBehaviour {
 	
         if(show)
         {
-            if(r_flag == true)
+            try
             {
-                r_flag = false;
 
-                //Debug.Log("w : " + Screen.width + " h " + Screen.height);
-
-                add(0.0F, 0.0F, 0.0F, new Rect(convert_manager.convert_to_bigger_position(new Vector2(0.2F, 0.4F)),
-                    convert_manager.convert_to_bigger_position(new Vector2(0.6F, 0.2F))), new Rect(), false, null,
-                    10, 0, "Start Game", null, GUI.Button, null, null);
-
-                add(0.0F, 0.0F, 0.0F, new Rect(convert_manager.convert_to_bigger_position(new Vector2(0.0F, 0.8F)),
-                    convert_manager.convert_to_bigger_position(new Vector2(0.5F, 0.2F))), new Rect(), false, null,
-                    9, 0, "Rank", null, GUI.Button, null, null);
-
-                add(0.0F, 0.0F, 0.0F, new Rect(convert_manager.convert_to_bigger_position(new Vector2(0.5F, 0.8F)),
-                    convert_manager.convert_to_bigger_position(new Vector2(0.5F, 0.2F))), new Rect(), false, null,
-                    8, 0, "Friend", null, GUI.Button, null, null);
-
-                
-                mac = communication_manager.get_mac();
-                //communicate_func(net_node, Defined.delay_time_limit);
-                //communication_manager.del();
-
-                
-               // communicate_func(net_node, Defined.delay_time_limit);
-                //communication_manager.del();
-            /*    DrawNode node = draw_manager.get_draw_node(1);
-                Debug.Log("pos "+node.get_position());*/
-
-            }
-            ItemNode node = draw_front;
-            DrawNode draw_node = null;
-            int node_id;
-            //process
-            /*while (node)
-            {
-                draw_node = draw_manager.get_draw_node(node.get_data());
-
-                node = node.get_link();
-            }*/
-
-            //i/o
-            if(Input.GetKeyDown(KeyCode.Escape))
-            {
-                communication_manager.add("arg0=update_time&arg1=" + mac + "&arg2=EOGTime");
-                Application.Quit();
-            }
-            int node_num = 0;
-            while(node)
-            {
-                node_num += 1;
-                draw_node = draw_manager.get_draw_node(node.get_data());
-                if(draw_node.get_return_event() == true)
+                if (r_flag == true)
                 {
-                    node_id = node.get_data();
-                    Debug.Log("node #" + node_id + " event ok");
-                    communication_manager.all_del();
-                    if(node_num == 1)
-                    {
-                        //r_flag = false;
-                        show = false;
-                        all_del();
-                        change_menu(2);
-                        Destroy(this);
-                        break;
-                    }
-                    else if(node_num == 2)
-                    {
-                        show = false;
-                        all_del();
-                        change_menu(4);
-                        Destroy(this);
-                        break;
-                    }
-                    else if(node_num == 3)
-                    {
-                        show = false;
-                        all_del();
-                        change_menu(5);
-                        Destroy(this);
-                        break;
-                    }
+                    r_flag = false;
+
+                    //Debug.Log("w : " + Screen.width + " h " + Screen.height);
+
+                    add(0.0F, 0.0F, 0.0F, new Rect(convert_manager.convert_to_bigger_position(new Vector2(0.2F, 0.4F)),
+                        convert_manager.convert_to_bigger_position(new Vector2(0.6F, 0.2F))), new Rect(), false, null,
+                        10, 0, "Start Game", null, GUI.Button, null, null);
+
+                    add(0.0F, 0.0F, 0.0F, new Rect(convert_manager.convert_to_bigger_position(new Vector2(0.0F, 0.8F)),
+                        convert_manager.convert_to_bigger_position(new Vector2(0.5F, 0.2F))), new Rect(), false, null,
+                        9, 0, "Rank", null, GUI.Button, null, null);
+
+                    add(0.0F, 0.0F, 0.0F, new Rect(convert_manager.convert_to_bigger_position(new Vector2(0.5F, 0.8F)),
+                        convert_manager.convert_to_bigger_position(new Vector2(0.5F, 0.2F))), new Rect(), false, null,
+                        8, 0, "Friend", null, GUI.Button, null, null);
+
+
+                    mac = communication_manager.get_mac();
+                    //communicate_func(net_node, Defined.delay_time_limit);
+                    //communication_manager.del();
+
+
+                    // communicate_func(net_node, Defined.delay_time_limit);
+                    //communication_manager.del();
+                    /*    DrawNode node = draw_manager.get_draw_node(1);
+                        Debug.Log("pos "+node.get_position());*/
+
                 }
-                node = node.get_link();
+                ItemNode node = draw_front;
+                DrawNode draw_node = null;
+                int node_id;
+                //process
+                /*while (node)
+                {
+                    draw_node = draw_manager.get_draw_node(node.get_data());
+
+                    node = node.get_link();
+                }*/
+
+                //i/o
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    communication_manager.add("arg0=update_time&arg1=" + mac + "&arg2=EOGTime");
+                    Application.Quit();
+                }
+                int node_num = 0;
+                while (node)
+                {
+                    node_num += 1;
+                    draw_node = draw_manager.get_draw_node(node.get_data());
+                    if (draw_node.get_return_event() == true)
+                    {
+                        node_id = node.get_data();
+                        Debug.Log("node #" + node_id + " event ok");
+                        communication_manager.all_del();
+                        if (node_num == 1)
+                        {
+                            //r_flag = false;
+                            show = false;
+                            all_del();
+                            change_menu(2);
+                            Destroy(this);
+                            break;
+                        }
+                        else if (node_num == 2)
+                        {
+                            show = false;
+                            all_del();
+                            change_menu(4);
+                            Destroy(this);
+                            break;
+                        }
+                        else if (node_num == 3)
+                        {
+                            show = false;
+                            all_del();
+                            change_menu(5);
+                            Destroy(this);
+                            break;
+                        }
+                    }
+                    node = node.get_link();
+                }
+            }
+            catch(UnityException err)
+            {
+                error = err.ToString();
             }
         }
         else
@@ -121,6 +129,12 @@ public class StartMenu : MonoBehaviour {
             }
         }
 	}
+
+    void OnGUI()
+    {
+        //GUI.Label(new Rect(200, 0, 100, 20), "Menu");
+        GUI.Label(new Rect(200, 0, 100, 20), error);
+    }
 
     public void set_communication_func(communicate communicate_target)
     {

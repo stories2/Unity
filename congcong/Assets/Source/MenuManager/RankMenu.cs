@@ -122,13 +122,13 @@ public class RankMenu : MonoBehaviour {
                 {
                     add(0.0F, 0.0F, 0.0F, new Rect(convert_manager.convert_to_bigger_position(new Vector2(0.1F, labelY)),
                     convert_manager.convert_to_bigger_position(new Vector2(0.3F, height))), new Rect(), false, null,
-                    uiDeep, 0, "#" + playerID, GUI.Label, null, null, null);
+                    uiDeep, 0, "#" + playerID, GUI.Box, null, null, null);
 
                     uiDeep = uiDeep - 1;
 
                     add(0.0F, 0.0F, 0.0F, new Rect(convert_manager.convert_to_bigger_position(new Vector2(0.4F, labelY)),
                     convert_manager.convert_to_bigger_position(new Vector2(0.3F, height))), new Rect(), false, null,
-                    uiDeep, 0, score, GUI.Label, null, null, null);
+                    uiDeep, 0, score, GUI.Box, null, null, null);
 
                     uiDeep = uiDeep - 1;
 

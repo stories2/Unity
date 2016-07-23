@@ -6,13 +6,15 @@ public class FriendMenu : MonoBehaviour {
     public delegate void ChangeMenu(int menu_id);
     public delegate NetNode communicate(NetNode target, long time_limit);
 
-    bool show = false, r_flag = true;
+    bool show = false, r_flag = true, deleteFriend = false, addFriend = false;
     DrawManager draw_manager;
     ConvertManager convert_manager;
     ItemNode draw_front = null, draw_rear = null;
     ChangeMenu change_menu;
     CommunicateManager communication_manager;
     communicate communicate_func;
+    string mac;
+    NetNode focuse_me;
 
     // Use this for initialization
     void Start()
@@ -34,7 +36,7 @@ public class FriendMenu : MonoBehaviour {
                 //Debug.Log("w : " + Screen.width + " h " + Screen.height);
 
                 add(0.0F, 0.0F, 0.0F, new Rect(convert_manager.convert_to_bigger_position(new Vector2(0.1F, 0.1F)),
-                    convert_manager.convert_to_bigger_position(new Vector2(0.6F, 0.2F))), new Rect(), false, null,
+                    convert_manager.convert_to_bigger_position(new Vector2(0.6F, 0.05F))), new Rect(), false, null,
                     10, 0, "Friend", GUI.Label, null, null, null);
 
                 add(0.0F, 0.0F, 0.0F, new Rect(convert_manager.convert_to_bigger_position(new Vector2(0.0F, 0.8F)),
@@ -46,8 +48,7 @@ public class FriendMenu : MonoBehaviour {
                     8, 0, "Del", null, GUI.Button, null, null);
 
 
-                string mac = communication_manager.get_mac();
-                NetNode net_node = communication_manager.add("arg0=new_bee&arg1=" + mac);
+                mac = communication_manager.get_mac();
                 //communicate_func(net_node, Defined.delay_time_limit);
                 //communication_manager.del();
 
@@ -57,17 +58,18 @@ public class FriendMenu : MonoBehaviour {
                 /*    DrawNode node = draw_manager.get_draw_node(1);
                     Debug.Log("pos "+node.get_position());*/
 
+                focuse_me = communication_manager.add("arg0=get_friend&arg1=" + mac);
+
             }
             ItemNode node = draw_front;
             DrawNode draw_node = null;
             int node_id;
             //process
-            /*while (node)
+            if(focuse_me.get_result() != "")
             {
-                draw_node = draw_manager.get_draw_node(node.get_data());
-
-                node = node.get_link();
-            }*/
+                ParseAndPaste(focuse_me.get_result());
+                focuse_me.set_result("");
+            }
 
             //i/o
 
@@ -78,15 +80,20 @@ public class FriendMenu : MonoBehaviour {
                 Destroy(this);
             }
             int node_num = 0;
+            deleteFriend = false;
             while (node)
             {
                 node_num += 1;
                 draw_node = draw_manager.get_draw_node(node.get_data());
+                if(draw_node.get_return_event() && deleteFriend)
+                {
+                    communication_manager.add("arg0=del_friend&arg1=" + mac + "&arg2=" + ParseUserID(draw_node.get_banner()));
+                }
                 if (draw_node.get_return_event() == true)
                 {
                     node_id = node.get_data();
-                    Debug.Log("node #" + node_id + " event ok");
-                    if (node_num == 1)
+                    Debug.Log("node #" + node_num + " event ok");
+                    if (node_num == 2)//Add Button
                     {/*
                         //r_flag = false;
                         show = false;
@@ -95,16 +102,23 @@ public class FriendMenu : MonoBehaviour {
                         Destroy(this);
                         break;*/
                     }
-                    else if (node_num == 2)
+                    else if (node_num == 3)//Del Button
                     {/*
                         show = false;
                         all_del();
                         change_menu(4);
                         Destroy(this);
                         break;*/
+                        deleteFriend = true;
                     }
                 }
                 node = node.get_link();
+            }
+            if(deleteFriend)
+            {
+                all_del();
+                change_menu(5);
+                Destroy(this);
             }
         }
         else
@@ -113,6 +127,74 @@ public class FriendMenu : MonoBehaviour {
             {
                 //r_flag = true;
 
+            }
+        }
+    }
+
+    public string ParseUserID(string data)
+    {
+        bool readStart = false;
+        int i, length = data.Length;
+        string result = "";
+        for(i = 0; i < length; i += 1)
+        {
+            if(readStart)
+            {
+                if ('0' <= data[i] && data[i] <= '9')
+                {
+                    result = result + data[i];
+                }
+                else
+                {
+                    break;
+                }
+            }
+            
+            if(data[i] == '#')
+            {
+                readStart = true;
+            }
+        }
+        return result;
+    }
+
+    public void ParseAndPaste(string result)
+    {
+        int i, length = result.Length, deep = 7;
+        string friend_info = "";
+        float y = 0.15F, height = 0.05F;
+        bool paste = false, end = false ;
+        for(i = 0; i < length; i += 1)
+        {
+            if(paste)
+            {
+                add(0.0F, 0.0F, 0.0F, new Rect(convert_manager.convert_to_bigger_position(new Vector2(0.1F, y)),
+                    convert_manager.convert_to_bigger_position(new Vector2(0.5F, height))), new Rect(), false, null,
+                    deep, 0, "#" + friend_info, null, null, null, GUI.Toggle);
+
+                y = y + height;
+                friend_info = "";
+                deep = deep - 1;
+                paste = false;
+                if(end)
+                {
+                    break;
+                }
+            }
+            else
+            {
+                if(('a' <= result[i] && result[i] <= 'z') || result[i] == '\n')
+                {
+                    if ('a' <= result[i] && result[i] <= 'z')
+                    {
+                        end = true;
+                    }
+                    paste = true;
+                }
+                else
+                {
+                    friend_info = friend_info + result[i];
+                }
             }
         }
     }

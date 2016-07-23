@@ -42,9 +42,11 @@ public class ViewManager : MonoBehaviour {
 
     void OnGUI()
     {
+        int drawSize = 0;
         DrawNode node = draw_manager.get_front();
         while(node)
         {
+            drawSize += 1;
             if(node.get_func_box() != null)
             {
                 /*DrawFunc test = new DrawFunc(GUI.Label);
@@ -84,5 +86,6 @@ public class ViewManager : MonoBehaviour {
             take_it = false;
             Defined.screen_captured = capture();
         }
+        GUI.Label(new Rect(0, 20, 100, 20),""+ drawSize);
     }
 }
