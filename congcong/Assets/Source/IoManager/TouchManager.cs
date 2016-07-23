@@ -23,13 +23,30 @@ public class TouchManager : MonoBehaviour {
         int i;
         for (i = 0; i < 2;i+=1)
         {
-            if (Input.GetMouseButtonDown(i))
+            if(Application.platform == RuntimePlatform.WindowsPlayer)
             {
-                event_func(Input.mousePosition, i, TouchPhase.Began);
+                if (Input.GetMouseButtonDown(i))
+                {
+                    event_func(Input.mousePosition, i, TouchPhase.Began);
+                }
+                if (Input.GetMouseButtonUp(i))
+                {
+                    event_func(Input.mousePosition, i, TouchPhase.Ended);
+                }
             }
-            if (Input.GetMouseButtonUp(i))
+            else if(Application.platform == RuntimePlatform.Android)
             {
-                event_func(Input.mousePosition, i, TouchPhase.Ended);
+                if(Input.touchCount > 0)
+                {
+                    if(Input.GetTouch(0).phase == TouchPhase.Began)
+                    {
+                        event_func(Input.GetTouch(0).position, i, TouchPhase.Began);
+                    }
+                    if(Input.GetTouch(0).phase == TouchPhase.Ended)
+                    {
+                        event_func(Input.GetTouch(0).position, i, TouchPhase.Ended);
+                    }
+                }
             }
         }
 	}

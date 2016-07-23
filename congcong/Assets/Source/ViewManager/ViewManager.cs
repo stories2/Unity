@@ -53,8 +53,17 @@ public class ViewManager : MonoBehaviour {
         this.set_func(test);
         DrawFunc execute = get_func();
         execute(get_position(), get_banner());*/
+
+                /*
+                 * 20160723
+                 * 모바일 플랫폼에서는 이벤트 처리가 바로바로 완료 되지 않기 때문에 처리가 될때까지는 
+                 * 이벤트를 false값으로 다시 원상복귀 하면 안된다
+                 */
                 DrawNode.DrawFunc_box execute = node.get_func_box();
-                node.set_return_event(execute(node.get_position(), node.get_banner()));
+                if(node.get_return_event() != true)
+                {
+                    node.set_return_event(execute(node.get_position(), node.get_banner()));
+                }
 
                 //Debug.Log("box");
             }

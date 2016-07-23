@@ -15,10 +15,10 @@ public class MainManager : MonoBehaviour {
     CommunicateManager communication_manager;
     FriendMenu friend_menu;
     FacebookMenu facebook_menu;
-    bool state;
+    bool state, created = false;
     string error = "";
 
-    bool r_flag;
+    bool r_flag = true;
 	// Use this for initialization
 	void Start () {
 
@@ -58,13 +58,16 @@ public class MainManager : MonoBehaviour {
                     touch_manager.init(touch_event_manager);
                     convert_manager.init();
 
-                    string mac = communication_manager.get_mac();
-                    communication_manager.add("arg0=new_bee&arg1=" + mac);
-                    communication_manager.add("arg0=update_time&arg1=" + mac + "&arg2=ConnectTime");
-
                     create_menu(1);
 
                     state = true;
+
+                    /*
+                     * 20160723 화면이 전혀 출력되지 않았던 이유는 바로 밑의 3줄코드 때문
+                     */
+                    string mac = communication_manager.get_mac();
+                    communication_manager.add("arg0=new_bee&arg1=" + mac);
+                    communication_manager.add("arg0=update_time&arg1=" + mac + "&arg2=ConnectTime");
                 }
                 else
                 {
@@ -99,6 +102,10 @@ public class MainManager : MonoBehaviour {
         {
             GUI.Label(new Rect(0, 0, 100, 20), "Pass / " + error);
         }
+        if(created)
+        {
+            GUI.Label(new Rect(0, 40, 100, 20), "Created" + error);
+        }
     }
 
     public void create_menu(int menu_id)
@@ -118,6 +125,7 @@ public class MainManager : MonoBehaviour {
                 start_menu.set_communication_manager(communication_manager);
                 start_menu.set_communication_func(communication_manager.wait_for_respone);
                 start_menu.set_show(true);
+                created = true;
             }
             catch(UnityException err)
             {

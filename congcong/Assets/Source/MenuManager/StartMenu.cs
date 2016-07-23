@@ -13,7 +13,8 @@ public class StartMenu : MonoBehaviour {
     ChangeMenu change_menu;
     CommunicateManager communication_manager;
     communicate communicate_func;
-    string mac, error = "";
+    string mac, error = "", event_log = "";
+    int node_num;
 
 	// Use this for initialization
 	void Start () {
@@ -76,7 +77,7 @@ public class StartMenu : MonoBehaviour {
                     communication_manager.add("arg0=update_time&arg1=" + mac + "&arg2=EOGTime");
                     Application.Quit();
                 }
-                int node_num = 0;
+                node_num = 0;
                 while (node)
                 {
                     node_num += 1;
@@ -84,7 +85,9 @@ public class StartMenu : MonoBehaviour {
                     if (draw_node.get_return_event() == true)
                     {
                         node_id = node.get_data();
-                        Debug.Log("node #" + node_id + " event ok");
+                        event_log = "node #" + node_id + " event ok";
+                        Debug.Log(event_log);
+                        
                         communication_manager.all_del();
                         if (node_num == 1)
                         {
@@ -133,7 +136,27 @@ public class StartMenu : MonoBehaviour {
     void OnGUI()
     {
         //GUI.Label(new Rect(200, 0, 100, 20), "Menu");
-        GUI.Label(new Rect(200, 0, 100, 20), error);
+        GUI.Label(new Rect(200, 0, 300, 20), "start menu "+error+" 노드 "+node_num + " event "+event_log);
+        if(draw_front)
+        {
+            GUI.Label(new Rect(200, 20, 300, 20), "DrawFront not null");
+
+            DrawNode draw_node = null;
+            ItemNode node = draw_front;
+            int height = 400;
+            while (node)
+            {
+                
+                draw_node = draw_manager.get_draw_node(node.get_data());
+                if (draw_node)
+                {
+                    GUI.Label(new Rect(0, height,480 , 20), "DrawNode #"+node.get_data() + " draw_node event : "+draw_node.get_return_event());
+                    
+                }
+                height += 20;
+                node = node.get_link();
+            }
+        }
     }
 
     public void set_communication_func(communicate communicate_target)
