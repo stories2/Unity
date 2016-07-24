@@ -8,6 +8,8 @@ public class ViewManager : MonoBehaviour {
     DrawManager draw_manager = null;
     screen_capture capture;
     bool take_it = false;
+    FileManager fileManager;
+    ConvertManager convertManager;
 	// Use this for initialization
 	void Start () {
 
@@ -40,8 +42,32 @@ public class ViewManager : MonoBehaviour {
         take_it = true;
     }
 
+    public void SetConvertManager(ConvertManager convertManager)
+    {
+        this.convertManager = convertManager;
+    }
+
+    public void SetFileManager(FileManager fileManager)
+    {
+        this.fileManager = fileManager;
+    }
+
+    public void DrawBackground()
+    {
+        
+    }
+
+    public void DrawForeground()
+    {/*
+        Texture2D foreGround = fileManager.get_resource(7);
+        float scale;
+        scale = convertManager.get_scale(foreGround, new Vector2(foreGround.width, foreGround.height), 1.0F);
+        */
+    }
+
     void OnGUI()
     {
+        DrawBackground();
         int drawSize = 0;
         DrawNode node = draw_manager.get_front();
         while(node)
@@ -96,5 +122,6 @@ public class ViewManager : MonoBehaviour {
             Defined.screen_captured = capture();
         }
         //GUI.Label(new Rect(0, 20, 100, 20),""+ drawSize);
+        DrawForeground();
     }
 }

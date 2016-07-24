@@ -83,7 +83,7 @@
 		$ranks = mysqli_query($db, "select * from rank order by Score DESC;");
 		while(!empty($rankRow = mysqli_fetch_array($ranks, MYSQLI_NUM)))
 		{
-			$isMyFriend = mysqli_query($db, "select * from friend where PlayerId = ".$myID.";");
+			$isMyFriend = mysqli_query($db, "select * from friend where PlayerId = ".$myID." and Broke = 0;");
 			while(!empty($friendRow = mysqli_fetch_array($isMyFriend, MYSQLI_NUM)))
 			{
 				if($count >= 11)
@@ -199,9 +199,16 @@
 		$fail = $Error;
 		$db = db_init();	
 		$myID = get_player_id($data[1]);
+		if($myID != $data[2])
+		{
 //		echo 'myid '.$myID;
-		mysqli_query($db, "insert into friend (PlayerId, FriendId) values (".$myID.", ".$data[2]."), (".$data[2].", ".$myID.");");
-		$fail = show_error($db);
+			mysqli_query($db, "insert into friend (PlayerId, FriendId) values (".$myID.", ".$data[2]."), (".$data[2].", ".$myID.");");
+			$fail = show_error($db);
+		}
+		else
+		{
+			$fail = 0;
+		}
 		mysqli_close($db);
 		return $fail;
 	}

@@ -72,7 +72,6 @@ public class ScoreMenu : MonoBehaviour {
                 {
                     node_id = node.get_data();
                     Debug.Log("node #" + node_id + " event ok");
-                    Defined.resultScore = 0;
                     if (node_num == 1)
                     {
                         //r_flag = false;
@@ -87,6 +86,7 @@ public class ScoreMenu : MonoBehaviour {
                     }
                     else if(node_num == 3)
                     {
+                        Defined.resultScore = 0;
                         change_menu(2);
                         all_del();
                         Destroy(this);

@@ -185,7 +185,7 @@ public class FacebookMenu : MonoBehaviour {
             string.Empty,
             new Uri(AppLinkURL),
             "콩콩",
-            "우리 모두 뛰어봐요",
+            "" + Defined.resultScore + "점을 획득!",
             "너는 이미 다운받고 있다",
             new Uri("http://lamb.kangnam.ac.kr/congcong/nyan.gif"),
             string.Empty,

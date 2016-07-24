@@ -61,6 +61,9 @@ public class MainManager : MonoBehaviour {
 
                     create_menu(1);
 
+                    view_manager.SetFileManager(file_manager);
+                    view_manager.SetConvertManager(convert_manager);
+
                     state = true;
 
                     /*

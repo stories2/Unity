@@ -146,7 +146,7 @@ public class GameMenu : MonoBehaviour {
             x_y = new Vector2(pos.x, pos.y);
             width_height = new Vector2(pos.width, pos.height);
             x_y = convert_manager.convert_to_smaller_position(x_y);
-            x_y.y = x_y.y + convert_manager.get_speed(jump_frame) + move_speed.y;
+            x_y.y = x_y.y + convert_manager.get_speed(jump_frame) - move_speed.y;
 
             if(door_pos.x < pos.x && pos.x <= door_pos.x + door_pos.width && door_pos.y < pos.y && pos.y < door_pos.y + door_pos.height)
             {
@@ -175,6 +175,7 @@ public class GameMenu : MonoBehaviour {
 
             if (Input.GetKeyDown(KeyCode.Escape))
             {
+                Defined.resultScore = 0;
                 all_del();
                 change_menu(1);
                 Destroy(this);

@@ -218,7 +218,7 @@ public class FriendMenu : MonoBehaviour {
         bool paste = false, end = false ;
         for(i = 0; i < length; i += 1)
         {
-            if(paste)
+            if(paste && friend_info != "")
             {
                 add(0.0F, 0.0F, 0.0F, new Rect(convert_manager.convert_to_bigger_position(new Vector2(0.1F, y)),
                     convert_manager.convert_to_bigger_position(new Vector2(0.5F, height))), new Rect(), false, null,
@@ -233,20 +233,17 @@ public class FriendMenu : MonoBehaviour {
                     break;
                 }
             }
+            if (('a' <= result[i] && result[i] <= 'z') || result[i] == '\n')
+            {
+                if ('a' <= result[i] && result[i] <= 'z')
+                {
+                    end = true;
+                }
+                paste = true;
+            }
             else
             {
-                if(('a' <= result[i] && result[i] <= 'z') || result[i] == '\n')
-                {
-                    if ('a' <= result[i] && result[i] <= 'z')
-                    {
-                        end = true;
-                    }
-                    paste = true;
-                }
-                else
-                {
-                    friend_info = friend_info + result[i];
-                }
+                friend_info = friend_info + result[i];
             }
         }
     }
