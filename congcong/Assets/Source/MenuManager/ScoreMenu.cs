@@ -33,7 +33,7 @@ public class ScoreMenu : MonoBehaviour {
 
                 add(0.0F, 0.0F, 0.0F, new Rect(convert_manager.convert_to_bigger_position(new Vector2(0.2F, 0.4F)),
                     convert_manager.convert_to_bigger_position(new Vector2(0.6F, 0.2F))), new Rect(), false, null,
-                    10, 0, "Score ", GUI.Label, null, null, null);
+                    10, 0, "Score " + Defined.resultScore, GUI.Label, null, null, null);
 
                 add(0.0F, 0.0F, 0.0F, new Rect(convert_manager.convert_to_bigger_position(new Vector2(0.0F, 0.8F)),
                     convert_manager.convert_to_bigger_position(new Vector2(0.5F, 0.2F))), new Rect(), false, null,
@@ -46,7 +46,7 @@ public class ScoreMenu : MonoBehaviour {
                 string mac = communicate_manager.get_mac();
 
                 communicate_manager.add("arg0=update_time&arg1=" + mac + "&arg2=LastPlayTime");
-
+                communicate_manager.add("arg0=update_score&arg1=" + mac + "&arg2=" + Defined.resultScore);
                 /*    DrawNode node = draw_manager.get_draw_node(1);
                     Debug.Log("pos "+node.get_position());*/
             }
@@ -72,6 +72,7 @@ public class ScoreMenu : MonoBehaviour {
                 {
                     node_id = node.get_data();
                     Debug.Log("node #" + node_id + " event ok");
+                    Defined.resultScore = 0;
                     if (node_num == 1)
                     {
                         //r_flag = false;
@@ -97,6 +98,7 @@ public class ScoreMenu : MonoBehaviour {
 
             if (Input.GetKeyDown(KeyCode.Escape))
             {
+                Defined.resultScore = 0;
                 all_del();
                 change_menu(1);
                 Destroy(this);

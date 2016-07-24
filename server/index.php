@@ -206,15 +206,37 @@
 		return $fail;
 	}
 
+	//plz dont call from client
+	function get_player_score($mac)
+	{
+		$db = db_init();
+		$player_id = get_player_id($mac);
+		$sql = "select Score from rank where PlayerId = ".$player_id.";";
+		$result = mysqli_query($db, $sql);
+		$row = mysqli_fetch_row($result);
+		if(!empty($row))
+		{
+			return $row[0];
+		}
+		return -1;
+	}
+
 	function update_score($data)// 0 : func , 1 : mac address , 2 : score
 	{
 		global $Error;
 		$fail = $Error;
 		$db = db_init();
 		$player_id = get_player_id($data[1]);
-		$sql =  "update rank set Score =".$data[2]." where PlayerId =".$player_id.";";
-		mysqli_query($db, $sql);
-		$fail = show_error($db);
+		if(get_player_score($data[1]) < $data[2])
+		{
+			$sql =  "update rank set Score =".$data[2]." where PlayerId =".$player_id.";";
+			mysqli_query($db, $sql);
+			$fail = show_error($db);
+		}
+		else
+		{
+			$fail = 0;
+		}
 		mysqli_close($db);
 		return $fail;
 	}

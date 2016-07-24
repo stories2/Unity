@@ -154,6 +154,7 @@ public class GameMenu : MonoBehaviour {
                 delay = 0;
                 show = false;
                 pass = true;
+                Defined.resultScore += 1;
             }
             
             if(x_y.y < 0.0F)

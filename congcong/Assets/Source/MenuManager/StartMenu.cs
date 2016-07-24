@@ -93,6 +93,7 @@ public class StartMenu : MonoBehaviour {
                         {
                             //r_flag = false;
                             show = false;
+                            Defined.resultScore = 0;
                             all_del();
                             change_menu(2);
                             Destroy(this);
