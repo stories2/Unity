@@ -132,7 +132,7 @@ public class StartMenu : MonoBehaviour {
             }
         }
 	}
-
+    /*
     void OnGUI()
     {
         //GUI.Label(new Rect(200, 0, 100, 20), "Menu");
@@ -157,7 +157,7 @@ public class StartMenu : MonoBehaviour {
                 node = node.get_link();
             }
         }
-    }
+    }*/
 
     public void set_communication_func(communicate communicate_target)
     {

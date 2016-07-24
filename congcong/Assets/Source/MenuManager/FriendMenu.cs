@@ -6,14 +6,14 @@ public class FriendMenu : MonoBehaviour {
     public delegate void ChangeMenu(int menu_id);
     public delegate NetNode communicate(NetNode target, long time_limit);
 
-    bool show = false, r_flag = true, deleteFriend = false, addFriend = false;
+    bool show = false, r_flag = true, deleteFriend = false, addFriend = false, showPopUp = false;
     DrawManager draw_manager;
     ConvertManager convert_manager;
     ItemNode draw_front = null, draw_rear = null;
     ChangeMenu change_menu;
     CommunicateManager communication_manager;
     communicate communicate_func;
-    string mac;
+    string mac, friendID = "";
     NetNode focuse_me;
 
     // Use this for initialization
@@ -72,13 +72,6 @@ public class FriendMenu : MonoBehaviour {
             }
 
             //i/o
-
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                all_del();
-                change_menu(1);
-                Destroy(this);
-            }
             int node_num = 0;
             deleteFriend = false;
             while (node)
@@ -101,6 +94,8 @@ public class FriendMenu : MonoBehaviour {
                         change_menu(2);
                         Destroy(this);
                         break;*/
+                        showPopUp = true;
+                        draw_node.set_return_event(false);
                     }
                     else if (node_num == 3)//Del Button
                     {/*
@@ -120,6 +115,20 @@ public class FriendMenu : MonoBehaviour {
                 change_menu(5);
                 Destroy(this);
             }
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                if(showPopUp)
+                {
+                    showPopUp = false;
+                }
+                else
+                {
+                    all_del();
+                    change_menu(1);
+                    Destroy(this);
+                }
+            }
         }
         else
         {
@@ -129,6 +138,49 @@ public class FriendMenu : MonoBehaviour {
 
             }
         }
+    }
+
+    void OnGUI()
+    {
+        if(showPopUp)
+        {
+            GUI.Window(0, new Rect(convert_manager.convert_to_bigger_position(new Vector2(0.2F, 0.2F)),
+                convert_manager.convert_to_bigger_position(new Vector2(0.6F, 0.4F))), PopUp, "Type Friend ID");
+        }
+    }
+
+    void PopUp(int windowID)
+    {
+        bool confirm;
+        friendID = GUI.TextField(new Rect(convert_manager.convert_to_bigger_position(new Vector2(0.05F,0.05F)),
+            convert_manager.convert_to_bigger_position(new Vector2(0.5F, 0.1F))), friendID);
+
+        confirm = GUI.Button(new Rect(convert_manager.convert_to_bigger_position(new Vector2(0.05F, 0.2F)),
+            convert_manager.convert_to_bigger_position(new Vector2(0.5F, 0.1F))), "Confirm");
+
+        if (confirm && CheckID(friendID))
+        {
+            communication_manager.add("arg0=add_friend&arg1=" + mac + "&arg2=" + friendID);
+            showPopUp = false;
+            all_del();
+            change_menu(5);
+            Destroy(this);
+        }
+    }
+
+    bool CheckID(string id)
+    {
+        int i, length = id.Length;
+        if (length == 0)
+            return false;
+        for(i = 0; i < length ; i += 1)
+        {
+            if('0' > id[i] && id[i] > '9')
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     public string ParseUserID(string data)

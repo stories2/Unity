@@ -16,7 +16,8 @@ public class MainManager : MonoBehaviour {
     FriendMenu friend_menu;
     FacebookMenu facebook_menu;
     bool state, created = false;
-    string error = "";
+    string error = "", mac = "", playerID = "";
+    NetNode playerIDNode;
 
     bool r_flag = true;
 	// Use this for initialization
@@ -65,9 +66,10 @@ public class MainManager : MonoBehaviour {
                     /*
                      * 20160723 화면이 전혀 출력되지 않았던 이유는 바로 밑의 3줄코드 때문
                      */
-                    string mac = communication_manager.get_mac();
+                    mac = communication_manager.get_mac();
                     communication_manager.add("arg0=new_bee&arg1=" + mac);
                     communication_manager.add("arg0=update_time&arg1=" + mac + "&arg2=ConnectTime");
+                    playerIDNode = communication_manager.add("arg0=echo_player_id&arg1=" + mac);
                 }
                 else
                 {
@@ -85,6 +87,19 @@ public class MainManager : MonoBehaviour {
                 view_manager.get_draw_manager().add(0.0F, 0.0F, 0.0F, new Rect(200, 0, 32, 32), new Rect(1 / test.width, 1 / test.height, 1, 1), false, test, 3, 0, "", null,
                     null, Graphics.DrawTexture, null);*/
             }    
+
+            if(playerIDNode.get_result() != "")
+            {
+                string playerIDParse = playerIDNode.get_result();
+                playerIDNode.set_result("");
+                int i, length = playerIDParse.Length;
+                for(i = 0; i < length; i += 1)
+                {
+                    if (playerIDParse[i] > '0' && playerIDParse[i] > '9')
+                        break;
+                    playerID = playerID + playerIDParse[i];
+                }
+            }
         }
         catch(UnityException err)
         {
@@ -92,8 +107,9 @@ public class MainManager : MonoBehaviour {
         }    
 	}
 
+    
     void OnGUI()
-    {
+    {/*
         if(Defined.screen_captured != null)
         {
             Graphics.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), Defined.screen_captured);
@@ -105,7 +121,8 @@ public class MainManager : MonoBehaviour {
         if(created)
         {
             GUI.Label(new Rect(0, 40, 100, 20), "Created" + error);
-        }
+        }*/
+        GUI.Label(new Rect(0, 0, 1000, 20), "My ID : " + playerID);
     }
 
     public void create_menu(int menu_id)

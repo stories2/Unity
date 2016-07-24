@@ -39,8 +39,8 @@ public class GameMenu : MonoBehaviour {
                 r_flag = false;
                 frame = 0;
 
-                add(0.0F, 0.0F, 0.0F, new Rect(convert_manager.convert_to_bigger_position(new Vector2(0.05F, 0.05F)),
-                    convert_manager.convert_to_bigger_position(new Vector2(0.1F, 0.1F))), new Rect(), false, null, 20, 0, "M", GUI.Label,
+                add(0.0F, 0.0F, 0.0F, new Rect(convert_manager.convert_to_bigger_position(new Vector2(0.0F, 0.1F)),
+                    convert_manager.convert_to_bigger_position(new Vector2(0.2F, 0.1F))), new Rect(), false, null, 21, 0, "M", GUI.Label,
                     null, null, null);
 
                 meter = draw_manager.get_draw_node(draw_rear.get_data());
@@ -62,11 +62,13 @@ public class GameMenu : MonoBehaviour {
                 scale = convert_manager.get_scale(door, new Vector2(0.05F, 0.0F), door.width / 4);
                 width = door.width / 4 * scale;
                 height = door.height / 4 * scale;
-                x = 1.0F;
+                x = 1.0F + Random.Range(0.5F, 1.0F);
                 y = 1.0F;
                 draw_pos = convert_manager.convert_to_smaller_position(new Vector2(width, height));
                 draw_x = x - draw_pos.x / 2;
                 draw_y = y - draw_pos.y;
+
+                meter.set_banner("" + (x - 0.5F) + "M");
 
                 add(0.0F, 0.0F, 0.0F, new Rect(convert_manager.convert_to_bigger_position(new Vector2(draw_x, draw_y)),
                     new Vector2(width, height)), new Rect(1.0F / 4, (float)Random.Range(1,4) / 4, 1.0F / 4, 1.0F / 4), false, door, 19, 0, "", null, null, Graphics.DrawTexture, null);
@@ -110,6 +112,8 @@ public class GameMenu : MonoBehaviour {
             Rect door_pos = door_control.get_position();
             door_pos.x = door_pos.x - convert_manager.convert_to_bigger_position(move_speed).x;
             door_control.set_position(door_pos);
+
+            meter.set_banner("" + (convert_manager.convert_to_smaller_position(new Vector2(door_pos.x, 0)).x - 0.5F) + "M");
 
             if (convert_manager.convert_to_smaller_position(new Vector2(door_pos.x, door_pos.y)).x < 0.4F)
             {
@@ -170,6 +174,7 @@ public class GameMenu : MonoBehaviour {
 
             if (Input.GetKeyDown(KeyCode.Escape))
             {
+                all_del();
                 change_menu(1);
                 Destroy(this);
             }
@@ -195,11 +200,7 @@ public class GameMenu : MonoBehaviour {
 
                 /**/
 
-                int node_id;
-                while ((node_id = del()) != 0)
-                {
-                    draw_manager.search_del(node_id);
-                }
+                all_del();
                 if(pass == true)
                 {
                     change_menu(2);
@@ -211,6 +212,15 @@ public class GameMenu : MonoBehaviour {
                 Destroy(this);
             }
             delay += 1;
+        }
+    }
+
+    public void all_del()
+    {
+        int node_id;
+        while ((node_id = del()) != 0)
+        {
+            draw_manager.search_del(node_id);
         }
     }
 

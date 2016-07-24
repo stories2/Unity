@@ -95,6 +95,6 @@ public class ViewManager : MonoBehaviour {
             take_it = false;
             Defined.screen_captured = capture();
         }
-        GUI.Label(new Rect(0, 20, 100, 20),""+ drawSize);
+        //GUI.Label(new Rect(0, 20, 100, 20),""+ drawSize);
     }
 }

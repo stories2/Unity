@@ -57,12 +57,6 @@ public class RankMenu : MonoBehaviour {
             }
             //i/o
 
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                all_del();
-                change_menu(1);
-                Destroy(this);
-            }
             int node_num = 0;
             while (node)
             {
@@ -78,6 +72,7 @@ public class RankMenu : MonoBehaviour {
                         communicate_manager.all_del();
                         change_menu(4);
                         Destroy(this);
+                        break;
                     }
                     else if (node_num == 3)
                     {
@@ -86,9 +81,17 @@ public class RankMenu : MonoBehaviour {
                         r_flag = true;
                         string mac = communicate_manager.get_mac();
                         order = "arg0=get_friend_top&arg1=" + mac;
+                        break;
                     }
                 }
                 node = node.get_link();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                all_del();
+                change_menu(1);
+                Destroy(this);
             }
         }
     }

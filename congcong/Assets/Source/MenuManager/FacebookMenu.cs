@@ -184,9 +184,9 @@ public class FacebookMenu : MonoBehaviour {
         FB.FeedShare(
             string.Empty,
             new Uri(AppLinkURL),
-            "title",
-            "caption",
-            "게임 테스팅",
+            "콩콩",
+            "우리 모두 뛰어봐요",
+            "너는 이미 다운받고 있다",
             new Uri("http://lamb.kangnam.ac.kr/congcong/nyan.gif"),
             string.Empty,
             ShareCallBack

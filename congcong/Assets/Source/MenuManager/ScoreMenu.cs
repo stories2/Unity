@@ -63,12 +63,6 @@ public class ScoreMenu : MonoBehaviour {
 
             //i/o
 
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                all_del();
-                change_menu(1);
-                Destroy(this);
-            }
             int node_num = 0;
             while (node)
             {
@@ -86,15 +80,26 @@ public class ScoreMenu : MonoBehaviour {
                     else if(node_num == 2)
                     {
                         change_menu(6);
+                        all_del();
+                        Destroy(this);
+                        break;
                     }
                     else if(node_num == 3)
                     {
                         change_menu(2);
+                        all_del();
+                        Destroy(this);
+                        break;
                     }
-                    all_del();
-                    Destroy(this);
                 }
                 node = node.get_link();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                all_del();
+                change_menu(1);
+                Destroy(this);
             }
         }
         else

@@ -57,6 +57,22 @@
 			echo $is_ok;
 	}
 
+	function get_friend($data)// 0 : func, 1 : macAddress
+	{
+		global $Error;
+		$fail = $Error;
+		$myID = get_player_id($data[1]);
+		$db = db_init();
+		$result = mysqli_query($db, "select FriendId, UpdateTime from friend where PlayerId = ".$myID." and Broke = 0;");
+		while(!empty($row = mysqli_fetch_array($result, MYSQLI_NUM)))
+		{
+			printf("%s %s\n", $row[0], $row[1]);
+		}
+		$fail = show_error($db);
+		mysqli_close($db);
+		return $fail;
+	}
+
 	function get_friend_top($data)// 0 : func , 1 : macAddress
 	{
 		global $Error;
@@ -163,25 +179,28 @@
 		return $fail;
 	}
 	
-	function del_friend($data)// 0 : func, 1 : my player id , 2 : friend player id
+	function del_friend($data)// 0 : func, 1 : my mac , 2 : friend player id
 	{
 		global $Error;
 		$fail = $Error;
 		$db = db_init();
-		mysqli_query($db, "update friend set Broke = 1 where PlayerId = ".$data[1]." and FriendId = ".$data[2]." ;");
-		mysqli_query($db, "update friend set UpdateTime = now() where PlayerId = ".$data[1]." and FriendId = ".$data[2]." ;");
+		$myID = get_player_id($data[1]);
+		mysqli_query($db, "update friend set Broke = 1 where PlayerId = ".$myID." and FriendId = ".$data[2]." ;");
+		mysqli_query($db, "update friend set UpdateTime = now() where PlayerId = ".$myID." and FriendId = ".$data[2]." ;");
 
 		$fail = show_error($db);
 		mysqli_close($db);
 		return $fail;
 	}
 		
-	function add_friend($data)// 0 : func, 1 : my player id , 2 : friend player id
+	function add_friend($data)// 0 : func, 1 : my mac , 2 : friend player id
 	{
 		global $Error;
 		$fail = $Error;
 		$db = db_init();	
-		mysqli_query($db, "insert into friend (PlayerId, FriendId) values (".$data[1].", ".$data[2]."), (".$data[2].", ".$data[1].");");
+		$myID = get_player_id($data[1]);
+//		echo 'myid '.$myID;
+		mysqli_query($db, "insert into friend (PlayerId, FriendId) values (".$myID.", ".$data[2]."), (".$data[2].", ".$myID.");");
 		$fail = show_error($db);
 		mysqli_close($db);
 		return $fail;
